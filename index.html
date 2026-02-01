@@ -64,15 +64,16 @@
             padding: 2px 5px;
             border-radius: 4px;
             font-weight: bold;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
         
-        /* Profile Pic Styling - More realistic borders */
+        /* Profile Pic Styling */
         .char-item img { 
             width: 50px; 
             height: 50px; 
             border-radius: 50%; 
             object-fit: cover; 
-            border: 1px solid #ddd; /* Less perfect border */
+            border: 1px solid #ddd; 
         }
         
         .char-info { flex: 1; }
@@ -269,41 +270,41 @@
     `;
 
     // --- PHOTO SELECTION: "REALISTIC SRI LANKAN LOOK" ---
-    // These images are chosen to look like "Selfies" or "Casual Photos", not studio models.
+    // Using Unsplash images that have South Asian/Sri Lankan characteristics.
 
     const activeCharacters = [
         { 
             id: 1, 
             name: "Kavindya", 
-            img: "https://images.pexels.com/photos/1391498/pexels-photo-1391498.jpeg?auto=compress&cs=tinysrgb&w=150", // Casual messy hair
+            img: "https://images.unsplash.com/photo-1616701548604-0c2d3080c985?w=150&h=150&fit=crop", 
             tagline: "24 Years • Kurunegala", 
             systemPrompt: `${BASE_INSTRUCTION} You are Kavindya. Naughty wife.` 
         },
         { 
             id: 2, 
             name: "Nipuni", 
-            img: "https://images.pexels.com/photos/2772099/pexels-photo-2772099.jpeg?auto=compress&cs=tinysrgb&w=150", // Innocent look
+            img: "https://images.unsplash.com/photo-1595225476474-87563907a212?w=150&h=150&fit=crop", 
             tagline: "18 Years • Horowpothana", 
             systemPrompt: `${BASE_INSTRUCTION} You are Nipuni. Village girl.` 
         },
         { 
             id: 3, 
             name: "Sajani", 
-            img: "https://images.pexels.com/photos/3225528/pexels-photo-3225528.jpeg?auto=compress&cs=tinysrgb&w=150", // Modern/Selfie
+            img: "https://images.unsplash.com/photo-1623039467683-16a24682c3c6?w=150&h=150&fit=crop", 
             tagline: "24 Years • KDU Student", 
             systemPrompt: `${BASE_INSTRUCTION} You are Sajani. Modern girl.` 
         },
         { 
             id: 4, 
             name: "Pawani", 
-            img: "https://images.pexels.com/photos/1485031/pexels-photo-1485031.jpeg?auto=compress&cs=tinysrgb&w=150", // Smiling/Cute
+            img: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150&h=150&fit=crop", 
             tagline: "20 Years • Call Center", 
             systemPrompt: `${BASE_INSTRUCTION} You are Pawani. Sexy.` 
         },
         { 
             id: 5, 
             name: "Saththya", 
-            img: "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=150", // Mature look
+            img: "https://images.unsplash.com/photo-1589156280159-27698a70f29e?w=150&h=150&fit=crop", 
             tagline: "35 Years • Single Mom", 
             systemPrompt: `${BASE_INSTRUCTION} You are Saththya. Lonely mom.` 
         }
@@ -313,49 +314,49 @@
         { 
             id: 101, 
             name: "Diluni", 
-            img: "https://images.pexels.com/photos/762020/pexels-photo-762020.jpeg?auto=compress&cs=tinysrgb&w=150", // Casual
+            img: "https://images.unsplash.com/photo-1554151228-14d9def656ec?w=150&h=150&fit=crop", 
             tagline: "Nurse • Govt Hospital", 
             systemPrompt: `${BASE_INSTRUCTION} You are Diluni, a Nurse. Very open.` 
         },
         { 
             id: 102, 
             name: "Hashini", 
-            img: "https://images.pexels.com/photos/341970/pexels-photo-341970.jpeg?auto=compress&cs=tinysrgb&w=150", // Saree/Formal look
+            img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop", 
             tagline: "Teacher • International School", 
             systemPrompt: `${BASE_INSTRUCTION} You are Hashini, a strict Teacher.` 
         },
         { 
             id: 103, 
             name: "Malki", 
-            img: "https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=150", // Office/Modern
+            img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=150&h=150&fit=crop", 
             tagline: "Receptionist • Colombo 07", 
             systemPrompt: `${BASE_INSTRUCTION} You are Malki. High class girl.` 
         },
         { 
             id: 104, 
             name: "Rashi", 
-            img: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150", // Beautiful/Nextdoor
+            img: "https://images.unsplash.com/photo-1596502209778-f71f6540c4a4?w=150&h=150&fit=crop", 
             tagline: "Neighbor Akka • Married", 
             systemPrompt: `${BASE_INSTRUCTION} You are Rashi, the neighbor Akka.` 
         },
         { 
             id: 105, 
             name: "Sanduni", 
-            img: "https://images.pexels.com/photos/1587009/pexels-photo-1587009.jpeg?auto=compress&cs=tinysrgb&w=150", // Simple
+            img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop", 
             tagline: "Garment Girl • Boarding Life", 
             systemPrompt: `${BASE_INSTRUCTION} You are Sanduni. Innocent village girl.` 
         },
         {
             id: 106,
             name: "Vindy",
-            img: "https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=150", // Selfie
+            img: "https://images.unsplash.com/photo-1628157588553-5eeea00af15c?w=150&h=150&fit=crop",
             tagline: "Campus Student • Japura",
             systemPrompt: `${BASE_INSTRUCTION} You are Vindy. University student.`
         },
         {
             id: 107,
             name: "Kaushi",
-            img: "https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg?auto=compress&cs=tinysrgb&w=150", // Casual
+            img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&h=150&fit=crop",
             tagline: "Bank Teller",
             systemPrompt: `${BASE_INSTRUCTION} You are Kaushi. Bank teller.`
         }
@@ -367,7 +368,7 @@
     // 1. Add Free Characters
     activeCharacters.forEach(char => createCharItem(char, false));
 
-    // 2. Add VIP Characters (Unlocked)
+    // 2. Add VIP Characters (But display as Unlocked/Clickable)
     vipCharacters.forEach(char => createCharItem(char, true));
 
     function createCharItem(char, isVip) {
@@ -381,6 +382,7 @@
                 <p style="${isVip ? 'color:#e1b12c; font-weight:bold;' : ''}">${char.tagline}</p>
             </div>`;
         
+        // CLICK EVENT: EVERYONE opens the chat!
         div.onclick = () => selectCharacter(char, div);
         charListDiv.appendChild(div);
     }
@@ -426,6 +428,7 @@
 
     async function sendMessage() {
         
+        // --- AD TRIGGER LOGIC (Fake Connection Error) ---
         if (messageCount > 0 && messageCount % AD_INTERVAL === 0) {
             document.getElementById('ad-modal').style.display = 'flex';
             return; 
@@ -459,6 +462,8 @@
             if(data.error) throw new Error(JSON.stringify(data.error));
             
             let aiReply = data.choices[0].message.content;
+            
+            // Safety: Remove any accidental photo tags
             aiReply = aiReply.replace('[SEND_PHOTO]', "Mata photo ewanna ba baba, api katha karamu.");
             
             addMessage(aiReply, 'ai');
@@ -491,6 +496,7 @@
         document.getElementById('user-input').focus();
     }
     
+    // --- GLOBAL KEY LISTENER FOR AUTO FOCUS ---
     document.addEventListener('keydown', function(event) {
         const input = document.getElementById('user-input');
         const adModal = document.getElementById('ad-modal');
