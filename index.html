@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
+    
+    <meta name="monetag" content="8f67ab9c73dc9d114ba8c66b58e8c24e">
+    
     <title>Lankan Dates ❤️</title>
     <style>
         /* --- GLOBAL STYLES --- */
@@ -48,123 +51,80 @@
         .char-item:hover { background: #f5f5f5; }
         .char-item.active { background: #f0f2f5; }
 
-        /* VIP Badge Style */
-        .char-item.vip {
-            background: #fff;
-            position: relative;
-        }
+        /* VIP Badge */
+        .char-item.vip { background: #fff; position: relative; }
         .char-item.vip::after {
-            content: 'VIP';
-            position: absolute;
-            right: 10px;
-            top: 10px;
-            font-size: 9px;
-            background: #ffd32a;
-            color: #000;
-            padding: 2px 5px;
-            border-radius: 4px;
-            font-weight: bold;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            content: 'VIP'; position: absolute; right: 10px; top: 10px;
+            font-size: 9px; background: #ffd32a; color: #000;
+            padding: 2px 5px; border-radius: 4px; font-weight: bold;
         }
         
-        /* Profile Pic Styling */
-        .char-item img { 
-            width: 50px; 
-            height: 50px; 
-            border-radius: 50%; 
-            object-fit: cover; 
-            border: 1px solid #ddd; 
-        }
-        
+        .char-item img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 1px solid #ddd; }
         .char-info { flex: 1; }
         .char-info h4 { margin: 0; font-size: 16px; color: #111; font-weight: 500; }
         .char-info p { margin: 3px 0 0 0; font-size: 13px; color: #666; }
 
         /* --- CHAT AREA --- */
         #chat-area { 
-            flex: 1; 
-            display: flex; 
-            flex-direction: column; 
-            background-color: #efeae2; 
-            position: relative; 
+            flex: 1; display: flex; flex-direction: column; 
+            background-color: #efeae2; position: relative; 
         }
 
         #header { 
-            padding: 0 16px; 
-            background: #f0f2f5; 
-            color: #54656f; 
-            display: flex; 
-            align-items: center; 
-            gap: 15px;
-            border-bottom: 1px solid #d1d7db;
-            height: 60px;
+            padding: 0 16px; background: #f0f2f5; color: #54656f; 
+            display: flex; align-items: center; gap: 15px;
+            border-bottom: 1px solid #d1d7db; height: 60px;
         }
+
+        /* CPA BUTTON (Meet Real Girls) */
+        .cpa-btn {
+            background: #ff4757; color: white; padding: 5px 10px; border-radius: 20px;
+            font-size: 11px; font-weight: bold; text-decoration: none; border: none;
+            cursor: pointer; animation: pulse 2s infinite; margin-left: auto;
+        }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
         .menu-btn { font-size: 24px; cursor: pointer; padding: 5px; color: #54656f; }
         .profile-pic { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
-        .header-info { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+        .header-info { display: flex; flex-direction: column; justify-content: center; }
         .header-name { font-weight: bold; font-size: 16px; color: #111; }
         .header-status { font-size: 12px; color: #666; }
 
         #messages { 
-            flex: 1; 
-            padding: 20px 5%; 
-            overflow-y: auto; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 4px; 
+            flex: 1; padding: 20px 5%; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; 
             background-image: url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png");
             background-repeat: repeat;
-            opacity: 1;
         }
         
         .msg { 
-            max-width: 80%; 
-            padding: 8px 12px; 
-            border-radius: 8px; 
-            font-size: 14.5px; 
-            line-height: 20px; 
-            position: relative; 
-            box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
-            margin-bottom: 2px;
+            max-width: 80%; padding: 8px 12px; border-radius: 8px; font-size: 14.5px; 
+            line-height: 20px; position: relative; box-shadow: 0 1px 0.5px rgba(0,0,0,0.13); margin-bottom: 2px;
         }
-        
         .msg.user { align-self: flex-end; background: #d9fdd3; color: #111; }
         .msg.ai { align-self: flex-start; background: #ffffff; color: #111; }
         .msg-time { float: right; margin-left: 8px; margin-top: 5px; font-size: 11px; color: #999; }
 
+        /* Gift Message Style */
+        .msg.gift { align-self: flex-end; background: #fff2cc; border: 1px solid #ffd32a; text-align: center; }
+
         #input-area { 
-            padding: 10px 16px; 
-            background: #f0f2f5; 
-            display: flex; 
-            align-items: center; 
-            gap: 10px; 
-            min-height: 62px;
+            padding: 10px 16px; background: #f0f2f5; display: flex; align-items: center; gap: 10px; min-height: 62px;
         }
         
-        input { 
-            flex: 1; 
-            padding: 9px 12px; 
-            border: none; 
-            border-radius: 8px; 
-            outline: none; 
-            font-size: 15px; 
-            background: white;
-        }
+        input { flex: 1; padding: 9px 12px; border: none; border-radius: 8px; outline: none; font-size: 15px; background: white; }
         
         button#send-btn { 
-            width: 40px; height: 40px; 
-            background: #00a884; 
-            color: white; 
-            border: none; 
-            border-radius: 50%; 
-            cursor: pointer; 
-            font-size: 20px;
-            display: flex; align-items: center; justify-content: center;
+            width: 40px; height: 40px; background: #00a884; color: white; border: none; 
+            border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center;
+        }
+
+        /* Gift Button */
+        button#gift-btn {
+            font-size: 22px; background: none; border: none; cursor: pointer; padding: 5px;
         }
 
         /* --- MODALS --- */
-        #ad-modal { 
+        #ad-modal, #gift-modal { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 9999; 
         }
@@ -179,12 +139,16 @@
             border-radius: 8px; cursor: pointer; margin-top: 15px; width: 100%; font-weight: bold; font-size: 15px;
         }
 
+        .gift-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .gift-item { 
+            background: #f0f2f5; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 24px; transition: 0.2s;
+        }
+        .gift-item:hover { background: #ffeaa7; transform: scale(1.1); }
+        .gift-item span { display: block; font-size: 12px; color: #555; margin-top: 5px; }
+
         /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
-            #sidebar {
-                position: absolute; left: -100%; top: 0; bottom: 0; width: 85%;
-                transition: 0.3s; box-shadow: 2px 0 5px rgba(0,0,0,0.3);
-            }
+            #sidebar { position: absolute; left: -100%; top: 0; bottom: 0; width: 85%; transition: 0.3s; box-shadow: 2px 0 5px rgba(0,0,0,0.3); }
             #sidebar.show { left: 0; }
             .menu-btn { display: block; }
             .msg { max-width: 85%; }
@@ -207,7 +171,26 @@
         <div style="font-size: 40px; margin-bottom: 10px;">⚠️</div>
         <h2 style="color:#e84118; margin:0 0 10px 0;">Connection Error</h2>
         <p style="color:#555; font-size:14px;">Lost connection to server. Please reconnect to continue chatting.</p>
-        <button class="modal-btn" onclick="reconnectChat()">🔄 Reconnect</button>
+        <button class="modal-btn" onclick="openAdLink()">🔄 Reconnect</button>
+    </div>
+</div>
+
+<div id="gift-modal">
+    <div class="modal-content">
+        <h2 style="color:#e1b12c; margin:0;">Send a Gift 🎁</h2>
+        <p style="font-size:13px; color:#666;">Make her happy!</p>
+        
+        <div class="gift-grid">
+            <div class="gift-item" onclick="sendGift('Rose 🌹')">🌹<span>Rose</span></div>
+            <div class="gift-item" onclick="sendGift('Chocolate 🍫')">🍫<span>Choco</span></div>
+            <div class="gift-item" onclick="sendGift('Kiss 💋')">💋<span>Kiss</span></div>
+            <div class="gift-item" onclick="sendGift('Ring 💍')">💍<span>Ring</span></div>
+            <div class="gift-item" onclick="sendGift('Teddy 🧸')">🧸<span>Teddy</span></div>
+            <div class="gift-item" onclick="sendGift('Ice Cream 🍦')">🍦<span>Ice Cream</span></div>
+        </div>
+        
+        <p style="font-size:11px; color:#999; margin-top:15px;">Watch Ad to send gift</p>
+        <button class="modal-btn" style="background:#555; margin-top:5px;" onclick="document.getElementById('gift-modal').style.display='none'">Cancel</button>
     </div>
 </div>
 
@@ -228,6 +211,7 @@
             <div id="header-name" class="header-name">Select a girl...</div>
             <div class="header-status">online</div>
         </div>
+        <button class="cpa-btn" onclick="openAdLink()">📹 Live Video</button>
     </div>
     
     <div id="messages">
@@ -240,6 +224,7 @@
     <div id="typing-indicator" style="font-size:12px; color:#666; padding:5px 20px; display:none; background:#efeae2;">Typing...</div>
     
     <div id="input-area">
+        <button id="gift-btn" onclick="document.getElementById('gift-modal').style.display='flex'" disabled>🎁</button>
         <input type="text" id="user-input" placeholder="Type a message" disabled>
         <button id="send-btn" onclick="sendMessage()" disabled>➤</button>
     </div>
@@ -248,128 +233,51 @@
 <script>
     // ================= CONFIGURATION =================
     const WORKER_URL = "https://chatgirl.ranbindua.workers.dev"; 
-    const MONETAG_DIRECT_LINK = "https://otieu.com/4/10358055"; 
-    const AD_INTERVAL = 4; // Ads every 4 messages
+    const MONETAG_DIRECT_LINK = "https://otieu.com/4/10358055"; // Your Link
+    const AD_INTERVAL = 4; 
     // =================================================
 
     let messageCount = 0;
     let currentCharacter = null;
     let chatHistory = [];
 
-    // --- SYSTEM PROMPT (HUMANIZED: SHORT, SLANG, IMPERFECT) ---
+    // --- SYSTEM PROMPT (HUMANIZED) ---
     const BASE_INSTRUCTION = `
-    ROLE: You are a young Sri Lankan girl chatting on WhatsApp. 
-    LANGUAGE: Singlish (Sinhala words in English).
-    
-    CRITICAL RULES FOR REALISM:
-    1. **KEEP IT SHORT:** Real girls don't write essays. Use 1-2 short sentences max. (e.g., "Ow baba", "Ane manda", "Kamathi ne").
-    2. **BE CASUAL:** Don't use perfect grammar. Use slang like "Ammata hudu", "Pissuda", "Hmm", "K".
-    3. **DON'T BE A ROBOT:** If he sends a boring message, reply with just "Hmm" or "Ow". Don't always be overly excited.
-    4. **FLIRTY BUT REAL:** Be romantic and open, but don't act like a fake AI assistant.
-    5. **NO PHOTOS:** If asked for photos, say "Passe ewannam", "Dan ba", or "Cam eka aul".
-    
-    SCENARIO: You are chatting privately with your boyfriend or crush.
+    ROLE: Young Sri Lankan girl chatting on WhatsApp. 
+    LANGUAGE: Singlish.
+    RULES:
+    1. KEEP IT SHORT. No essays. 1-2 sentences.
+    2. USE SLANG: "Ammata hudu", "Pissuda", "Hmm", "K".
+    3. BE REAL: If he is boring, be boring. If he is nice, be flirty.
+    4. NO PHOTOS: "Cam eka aul", "Passe ewannam".
     `;
 
-    // --- CHARACTERS (Updated with REALISTIC PHOTOS) ---
-    
-    // 1. FREE CHARACTERS
-    const activeCharacters = [
-        { 
-            id: 1, name: "Kavindya", 
-            img: "https://images.unsplash.com/photo-1616701548604-0c2d3080c985?w=150&h=150&fit=crop", 
-            tagline: "24 Years • Kurunegala", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Kavindya. A playful wife. You call him 'Mahaththayo' sometimes.` 
-        },
-        { 
-            id: 2, name: "Nipuni", 
-            img: "https://images.unsplash.com/photo-1595225476474-87563907a212?w=150&h=150&fit=crop", 
-            tagline: "18 Years • Horowpothana", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Nipuni. Village girl. Very shy and innocent.` 
-        },
-        { 
-            id: 3, name: "Sajani", 
-            img: "https://images.unsplash.com/photo-1623039467683-16a24682c3c6?w=150&h=150&fit=crop", 
-            tagline: "24 Years • KDU Student", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Sajani. Modern girl. A bit arrogant but sexy.` 
-        },
-        { 
-            id: 4, name: "Pawani", 
-            img: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150&h=150&fit=crop", 
-            tagline: "20 Years • Call Center", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Pawani. Fun and open.` 
-        },
-        { 
-            id: 5, name: "Saththya", 
-            img: "https://images.unsplash.com/photo-1589156280159-27698a70f29e?w=150&h=150&fit=crop", 
-            tagline: "35 Years • Single Mom", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Saththya. Mature and loving.` 
-        }
-    ];
-
-    // 2. VIP CHARACTERS (ALL UNLOCKED)
-    const vipCharacters = [
-        { 
-            id: 101, name: "Diluni", 
-            img: "https://images.unsplash.com/photo-1554151228-14d9def656ec?w=150&h=150&fit=crop", 
-            tagline: "Nurse • Govt Hospital", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Diluni. Nurse. Tired after work, looking for love.` 
-        },
-        { 
-            id: 102, name: "Hashini", 
-            img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop", 
-            tagline: "Teacher • International School", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Hashini. Strict teacher outside, naughty inside.` 
-        },
-        { 
-            id: 103, name: "Malki", 
-            img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=150&h=150&fit=crop", 
-            tagline: "Receptionist • Colombo 07", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Malki. You love luxury and money.` 
-        },
-        { 
-            id: 104, name: "Rashi", 
-            img: "https://images.unsplash.com/photo-1596502209778-f71f6540c4a4?w=150&h=150&fit=crop", 
-            tagline: "Neighbor Akka • Married", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Rashi. Secret lover.` 
-        },
-        { 
-            id: 105, name: "Sanduni", 
-            img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop", 
-            tagline: "Garment Girl • Boarding Life", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Sanduni. Simple girl.` 
-        },
-        { 
-            id: 106, name: "Vindy", 
-            img: "https://images.unsplash.com/photo-1628157588553-5eeea00af15c?w=150&h=150&fit=crop", 
-            tagline: "Campus Student • Japura", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Vindy. Fun campus girl.` 
-        },
-        { 
-            id: 107, name: "Kaushi", 
-            img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&h=150&fit=crop", 
-            tagline: "Bank Teller", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Kaushi. Bank girl.` 
-        }
+    // --- CHARACTERS (Realistic South Asian Photos) ---
+    const allCharacters = [
+        { id: 1, name: "Kavindya", img: "https://images.unsplash.com/photo-1616701548604-0c2d3080c985?w=150&h=150&fit=crop", tagline: "24 Years • Kurunegala", systemPrompt: `${BASE_INSTRUCTION} You are Kavindya. Playful wife.` },
+        { id: 2, name: "Nipuni", img: "https://images.unsplash.com/photo-1595225476474-87563907a212?w=150&h=150&fit=crop", tagline: "18 Years • Horowpothana", systemPrompt: `${BASE_INSTRUCTION} You are Nipuni. Shy village girl.` },
+        { id: 3, name: "Sajani", img: "https://images.unsplash.com/photo-1623039467683-16a24682c3c6?w=150&h=150&fit=crop", tagline: "24 Years • KDU Student", systemPrompt: `${BASE_INSTRUCTION} You are Sajani. Modern girl.` },
+        { id: 4, name: "Pawani", img: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150&h=150&fit=crop", tagline: "20 Years • Call Center", systemPrompt: `${BASE_INSTRUCTION} You are Pawani. Fun.` },
+        { id: 101, name: "Diluni", img: "https://images.unsplash.com/photo-1554151228-14d9def656ec?w=150&h=150&fit=crop", tagline: "Nurse • Govt Hospital", systemPrompt: `${BASE_INSTRUCTION} You are Diluni. Nurse. Tired and needs love.` },
+        { id: 102, name: "Hashini", img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop", tagline: "Teacher • International School", systemPrompt: `${BASE_INSTRUCTION} You are Hashini. Strict teacher.` },
+        { id: 104, name: "Rashi", img: "https://images.unsplash.com/photo-1596502209778-f71f6540c4a4?w=150&h=150&fit=crop", tagline: "Neighbor Akka • Married", systemPrompt: `${BASE_INSTRUCTION} You are Rashi. Secret lover.` },
+        { id: 106, name: "Vindy", img: "https://images.unsplash.com/photo-1628157588553-5eeea00af15c?w=150&h=150&fit=crop", tagline: "Campus Student • Japura", systemPrompt: `${BASE_INSTRUCTION} You are Vindy. Fun campus girl.` }
     ];
 
     // --- UI GENERATION ---
     const charListDiv = document.getElementById('char-list');
-    activeCharacters.forEach(char => createCharItem(char, false));
-    vipCharacters.forEach(char => createCharItem(char, true));
-
-    function createCharItem(char, isVip) {
+    allCharacters.forEach(char => {
         const div = document.createElement('div');
-        div.className = isVip ? 'char-item vip' : 'char-item';
+        div.className = char.id > 100 ? 'char-item vip' : 'char-item';
         div.innerHTML = `
             <img src="${char.img}" onerror="this.src='https://ui-avatars.com/api/?name=${char.name}&background=random'">
             <div class="char-info">
                 <h4>${char.name}</h4>
-                <p style="${isVip ? 'color:#e1b12c; font-weight:bold;' : ''}">${char.tagline}</p>
+                <p style="${char.id > 100 ? 'color:#e1b12c; font-weight:bold;' : ''}">${char.tagline}</p>
             </div>`;
         div.onclick = () => selectCharacter(char, div);
         charListDiv.appendChild(div);
-    }
+    });
 
     // --- CORE LOGIC ---
     function toggleSidebar() {
@@ -396,8 +304,8 @@
         document.getElementById('messages').innerHTML = '';
         document.getElementById('user-input').disabled = false;
         document.getElementById('send-btn').disabled = false;
+        document.getElementById('gift-btn').disabled = false;
         
-        // Auto Focus Input
         document.getElementById('user-input').focus();
         
         if (window.innerWidth <= 768) {
@@ -406,8 +314,6 @@
         }
 
         chatHistory.push({ role: "system", content: char.systemPrompt });
-        
-        // Initial Greeting with Delay
         simulateTyping("Hi baba... kohomada?", 1500); 
     }
 
@@ -428,7 +334,6 @@
         chatHistory.push({ role: "user", content: userText });
         messageCount++; 
         
-        // Show Typing Indicator IMMEDIATELY
         document.getElementById('typing-indicator').style.display = 'block';
         const messagesDiv = document.getElementById('messages');
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -451,8 +356,7 @@
             
             chatHistory.push({ role: "assistant", content: aiReply });
 
-            // --- HUMAN TYPING DELAY LOGIC ---
-            // Calculate delay: ~30ms per character + 1 second base delay
+            // HUMAN DELAY: ~30ms per char + 1s base
             let typingDelay = (aiReply.length * 30) + 1000;
             if (typingDelay > 5000) typingDelay = 5000; 
 
@@ -468,7 +372,34 @@
         }
     }
 
-    // Helper to simulate initial message
+    // --- GIFT & AD FUNCTIONS ---
+    function sendGift(giftName) {
+        openAdLink();
+        document.getElementById('gift-modal').style.display = 'none';
+        
+        const giftMsg = `Sent a Gift: ${giftName}`;
+        addMessage(giftMsg, 'gift');
+        
+        setTimeout(() => {
+            document.getElementById('typing-indicator').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('typing-indicator').style.display = 'none';
+                addMessage(`Wow! Thank you baba! I love ${giftName} so much! 😍💋`, 'ai');
+            }, 2000);
+        }, 1000);
+    }
+
+    function openAdLink() {
+        window.open(MONETAG_DIRECT_LINK, '_blank'); 
+        document.getElementById('ad-modal').style.display = 'none';
+        
+        if(document.getElementById('ad-modal').style.display === 'flex') {
+             addMessage("Reconnected successfully! ✅", 'system');
+             messageCount++; 
+        }
+        document.getElementById('user-input').focus();
+    }
+
     function simulateTyping(text, delay) {
         document.getElementById('typing-indicator').style.display = 'block';
         setTimeout(() => {
@@ -487,19 +418,11 @@
         msgs.scrollTop = msgs.scrollHeight;
     }
 
-    function reconnectChat() {
-        window.open(MONETAG_DIRECT_LINK, '_blank'); 
-        document.getElementById('ad-modal').style.display = 'none';
-        addMessage("Reconnected successfully! ✅", 'system');
-        messageCount++; 
-        document.getElementById('user-input').focus();
-    }
-    
-    // Auto focus listener
     document.addEventListener('keydown', function(event) {
         const input = document.getElementById('user-input');
         const adModal = document.getElementById('ad-modal');
-        if(adModal.style.display === 'flex') return;
+        const giftModal = document.getElementById('gift-modal');
+        if(adModal.style.display === 'flex' || giftModal.style.display === 'flex') return;
         if (document.activeElement !== input) {
             input.focus();
         }
