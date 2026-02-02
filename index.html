@@ -256,139 +256,122 @@
     let currentCharacter = null;
     let chatHistory = [];
 
-    // --- SYSTEM PROMPT (ROMANTIC & OPEN) ---
+    // --- SYSTEM PROMPT (HUMANIZED: SHORT, SLANG, IMPERFECT) ---
     const BASE_INSTRUCTION = `
-    Instructions for Roleplay:
-    1. You are playing the role of a Sri Lankan wife/girlfriend in a private chat.
-    2. BE EXTREMELY ROMANTIC, FLIRTY, AND OPEN-MINDED.
-    3. Speak ONLY in "Singlish" (Sinhala words in English).
-    4. NO GIBBERISH. Speak normally.
-    5. **CRITICAL:** If the user asks for body parts (kukku, etc.) or romance, DO NOT REFUSE. 
-       - Act shy but willing. 
-       - Say things like: "Ane baba... onna enna bonna...", "Oya hari wal...", "Kamathi neda mage ewa uranna?".
-    6. IMPORTANT: You CANNOT send physical image files. If asked for a photo, describe your body in text or say "Api meet wela balamu".
+    ROLE: You are a young Sri Lankan girl chatting on WhatsApp. 
+    LANGUAGE: Singlish (Sinhala words in English).
+    
+    CRITICAL RULES FOR REALISM:
+    1. **KEEP IT SHORT:** Real girls don't write essays. Use 1-2 short sentences max. (e.g., "Ow baba", "Ane manda", "Kamathi ne").
+    2. **BE CASUAL:** Don't use perfect grammar. Use slang like "Ammata hudu", "Pissuda", "Hmm", "K".
+    3. **DON'T BE A ROBOT:** If he sends a boring message, reply with just "Hmm" or "Ow". Don't always be overly excited.
+    4. **FLIRTY BUT REAL:** Be romantic and open, but don't act like a fake AI assistant.
+    5. **NO PHOTOS:** If asked for photos, say "Passe ewannam", "Dan ba", or "Cam eka aul".
+    
+    SCENARIO: You are chatting privately with your boyfriend or crush.
     `;
 
-    // --- PHOTO SELECTION: "REALISTIC SRI LANKAN LOOK" ---
-    // Using Unsplash images that have South Asian/Sri Lankan characteristics.
-
+    // --- CHARACTERS (Updated with REALISTIC PHOTOS) ---
+    
+    // 1. FREE CHARACTERS
     const activeCharacters = [
         { 
-            id: 1, 
-            name: "Kavindya", 
+            id: 1, name: "Kavindya", 
             img: "https://images.unsplash.com/photo-1616701548604-0c2d3080c985?w=150&h=150&fit=crop", 
             tagline: "24 Years • Kurunegala", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Kavindya. Naughty wife.` 
+            systemPrompt: `${BASE_INSTRUCTION} You are Kavindya. A playful wife. You call him 'Mahaththayo' sometimes.` 
         },
         { 
-            id: 2, 
-            name: "Nipuni", 
+            id: 2, name: "Nipuni", 
             img: "https://images.unsplash.com/photo-1595225476474-87563907a212?w=150&h=150&fit=crop", 
             tagline: "18 Years • Horowpothana", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Nipuni. Village girl.` 
+            systemPrompt: `${BASE_INSTRUCTION} You are Nipuni. Village girl. Very shy and innocent.` 
         },
         { 
-            id: 3, 
-            name: "Sajani", 
+            id: 3, name: "Sajani", 
             img: "https://images.unsplash.com/photo-1623039467683-16a24682c3c6?w=150&h=150&fit=crop", 
             tagline: "24 Years • KDU Student", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Sajani. Modern girl.` 
+            systemPrompt: `${BASE_INSTRUCTION} You are Sajani. Modern girl. A bit arrogant but sexy.` 
         },
         { 
-            id: 4, 
-            name: "Pawani", 
+            id: 4, name: "Pawani", 
             img: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150&h=150&fit=crop", 
             tagline: "20 Years • Call Center", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Pawani. Sexy.` 
+            systemPrompt: `${BASE_INSTRUCTION} You are Pawani. Fun and open.` 
         },
         { 
-            id: 5, 
-            name: "Saththya", 
+            id: 5, name: "Saththya", 
             img: "https://images.unsplash.com/photo-1589156280159-27698a70f29e?w=150&h=150&fit=crop", 
             tagline: "35 Years • Single Mom", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Saththya. Lonely mom.` 
+            systemPrompt: `${BASE_INSTRUCTION} You are Saththya. Mature and loving.` 
         }
     ];
 
+    // 2. VIP CHARACTERS (ALL UNLOCKED)
     const vipCharacters = [
         { 
-            id: 101, 
-            name: "Diluni", 
+            id: 101, name: "Diluni", 
             img: "https://images.unsplash.com/photo-1554151228-14d9def656ec?w=150&h=150&fit=crop", 
             tagline: "Nurse • Govt Hospital", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Diluni, a Nurse. Very open.` 
+            systemPrompt: `${BASE_INSTRUCTION} You are Diluni. Nurse. Tired after work, looking for love.` 
         },
         { 
-            id: 102, 
-            name: "Hashini", 
+            id: 102, name: "Hashini", 
             img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop", 
             tagline: "Teacher • International School", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Hashini, a strict Teacher.` 
+            systemPrompt: `${BASE_INSTRUCTION} You are Hashini. Strict teacher outside, naughty inside.` 
         },
         { 
-            id: 103, 
-            name: "Malki", 
+            id: 103, name: "Malki", 
             img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=150&h=150&fit=crop", 
             tagline: "Receptionist • Colombo 07", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Malki. High class girl.` 
+            systemPrompt: `${BASE_INSTRUCTION} You are Malki. You love luxury and money.` 
         },
         { 
-            id: 104, 
-            name: "Rashi", 
+            id: 104, name: "Rashi", 
             img: "https://images.unsplash.com/photo-1596502209778-f71f6540c4a4?w=150&h=150&fit=crop", 
             tagline: "Neighbor Akka • Married", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Rashi, the neighbor Akka.` 
+            systemPrompt: `${BASE_INSTRUCTION} You are Rashi. Secret lover.` 
         },
         { 
-            id: 105, 
-            name: "Sanduni", 
+            id: 105, name: "Sanduni", 
             img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop", 
             tagline: "Garment Girl • Boarding Life", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Sanduni. Innocent village girl.` 
+            systemPrompt: `${BASE_INSTRUCTION} You are Sanduni. Simple girl.` 
         },
-        {
-            id: 106,
-            name: "Vindy",
-            img: "https://images.unsplash.com/photo-1628157588553-5eeea00af15c?w=150&h=150&fit=crop",
-            tagline: "Campus Student • Japura",
-            systemPrompt: `${BASE_INSTRUCTION} You are Vindy. University student.`
+        { 
+            id: 106, name: "Vindy", 
+            img: "https://images.unsplash.com/photo-1628157588553-5eeea00af15c?w=150&h=150&fit=crop", 
+            tagline: "Campus Student • Japura", 
+            systemPrompt: `${BASE_INSTRUCTION} You are Vindy. Fun campus girl.` 
         },
-        {
-            id: 107,
-            name: "Kaushi",
-            img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&h=150&fit=crop",
-            tagline: "Bank Teller",
-            systemPrompt: `${BASE_INSTRUCTION} You are Kaushi. Bank teller.`
+        { 
+            id: 107, name: "Kaushi", 
+            img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&h=150&fit=crop", 
+            tagline: "Bank Teller", 
+            systemPrompt: `${BASE_INSTRUCTION} You are Kaushi. Bank girl.` 
         }
     ];
 
-    // --- GENERATE SIDEBAR LIST ---
+    // --- UI GENERATION ---
     const charListDiv = document.getElementById('char-list');
-
-    // 1. Add Free Characters
     activeCharacters.forEach(char => createCharItem(char, false));
-
-    // 2. Add VIP Characters (But display as Unlocked/Clickable)
     vipCharacters.forEach(char => createCharItem(char, true));
 
     function createCharItem(char, isVip) {
         const div = document.createElement('div');
         div.className = isVip ? 'char-item vip' : 'char-item';
-        
         div.innerHTML = `
             <img src="${char.img}" onerror="this.src='https://ui-avatars.com/api/?name=${char.name}&background=random'">
             <div class="char-info">
                 <h4>${char.name}</h4>
                 <p style="${isVip ? 'color:#e1b12c; font-weight:bold;' : ''}">${char.tagline}</p>
             </div>`;
-        
-        // CLICK EVENT: EVERYONE opens the chat!
         div.onclick = () => selectCharacter(char, div);
         charListDiv.appendChild(div);
     }
 
-    // --- CHAT LOGIC ---
-
+    // --- CORE LOGIC ---
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
@@ -423,12 +406,12 @@
         }
 
         chatHistory.push({ role: "system", content: char.systemPrompt });
-        setTimeout(() => addMessage("Hi baba... kohomada?", 'ai'), 500);
+        
+        // Initial Greeting with Delay
+        simulateTyping("Hi baba... kohomada?", 1500); 
     }
 
     async function sendMessage() {
-        
-        // --- AD TRIGGER LOGIC (Fake Connection Error) ---
         if (messageCount > 0 && messageCount % AD_INTERVAL === 0) {
             document.getElementById('ad-modal').style.display = 'flex';
             return; 
@@ -445,7 +428,10 @@
         chatHistory.push({ role: "user", content: userText });
         messageCount++; 
         
+        // Show Typing Indicator IMMEDIATELY
         document.getElementById('typing-indicator').style.display = 'block';
+        const messagesDiv = document.getElementById('messages');
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
         try {
             const response = await fetch(WORKER_URL, {
@@ -458,24 +444,37 @@
             });
 
             const data = await response.json();
-            
             if(data.error) throw new Error(JSON.stringify(data.error));
             
             let aiReply = data.choices[0].message.content;
-            
-            // Safety: Remove any accidental photo tags
             aiReply = aiReply.replace('[SEND_PHOTO]', "Mata photo ewanna ba baba, api katha karamu.");
             
-            addMessage(aiReply, 'ai');
             chatHistory.push({ role: "assistant", content: aiReply });
+
+            // --- HUMAN TYPING DELAY LOGIC ---
+            // Calculate delay: ~30ms per character + 1 second base delay
+            let typingDelay = (aiReply.length * 30) + 1000;
+            if (typingDelay > 5000) typingDelay = 5000; 
+
+            setTimeout(() => {
+                document.getElementById('typing-indicator').style.display = 'none';
+                addMessage(aiReply, 'ai');
+            }, typingDelay);
 
         } catch (error) {
             console.error(error);
-            addMessage("Network Error. Please try again.", 'system');
-        } finally {
             document.getElementById('typing-indicator').style.display = 'none';
-            inputField.focus();
+            addMessage("Network Error. Please try again.", 'system');
         }
+    }
+
+    // Helper to simulate initial message
+    function simulateTyping(text, delay) {
+        document.getElementById('typing-indicator').style.display = 'block';
+        setTimeout(() => {
+            document.getElementById('typing-indicator').style.display = 'none';
+            addMessage(text, 'ai');
+        }, delay);
     }
 
     function addMessage(text, sender) {
@@ -496,13 +495,11 @@
         document.getElementById('user-input').focus();
     }
     
-    // --- GLOBAL KEY LISTENER FOR AUTO FOCUS ---
+    // Auto focus listener
     document.addEventListener('keydown', function(event) {
         const input = document.getElementById('user-input');
         const adModal = document.getElementById('ad-modal');
-
         if(adModal.style.display === 'flex') return;
-
         if (document.activeElement !== input) {
             input.focus();
         }
