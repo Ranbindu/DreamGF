@@ -20,23 +20,26 @@
         /* --- SIDEBAR --- */
         #sidebar { background: white; display: flex; flex-direction: column; border-right: 1px solid #ddd; z-index: 1000; }
         .sidebar-header { padding: 10px 16px; background: #f0f2f5; border-bottom: 1px solid #d1d7db; height: 60px; display: flex; align-items: center; }
+        
+        /* Updated Character Item Style */
         .char-item { padding: 12px 15px; border-bottom: 1px solid #f0f2f5; display: flex; align-items: center; gap: 15px; cursor: pointer; transition: 0.2s; }
         .char-item:hover { background: #f5f5f5; }
         .char-item.active { background: #f0f2f5; }
         .char-item.vip { background: #fff; position: relative; }
         .char-item.vip::after { content: 'VIP'; position: absolute; right: 10px; top: 10px; font-size: 9px; background: #ffd32a; color: #000; padding: 2px 5px; border-radius: 4px; font-weight: bold; }
+        
         .char-item img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 1px solid #ddd; }
         .char-info { flex: 1; }
-        .char-info h4 { margin: 0; font-size: 16px; color: #111; font-weight: 500; }
-        .char-info p { margin: 3px 0 0 0; font-size: 13px; color: #666; }
+        .char-info h4 { margin: 0; font-size: 15px; color: #111; font-weight: 600; }
+        .char-info p { margin: 3px 0 0 0; font-size: 12px; color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
         /* --- CHAT AREA --- */
         #chat-area { flex: 1; display: flex; flex-direction: column; background-color: #efeae2; position: relative; }
         #header { padding: 0 16px; background: #f0f2f5; color: #54656f; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #d1d7db; height: 60px; }
         
         /* VIDEO CALL BUTTON */
-        .video-btn { font-size: 22px; cursor: pointer; color: #00a884; margin-left: auto; transition: 0.2s; }
-        .video-btn:hover { color: #008f6f; transform: scale(1.1); }
+        .video-btn { font-size: 24px; cursor: pointer; color: #00a884; margin-left: auto; transition: 0.2s; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
         .menu-btn { font-size: 24px; cursor: pointer; padding: 5px; color: #54656f; }
         .profile-pic { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
@@ -44,11 +47,11 @@
         .header-name { font-weight: bold; font-size: 16px; color: #111; }
         .header-status { font-size: 12px; color: #666; }
 
-        /* --- LOVE METER (Floating Heart) --- */
+        /* --- LOVE METER --- */
         #love-meter-container {
             position: absolute; top: 70px; right: 15px; z-index: 500;
             width: 50px; height: 50px; cursor: pointer;
-            background: rgba(255, 255, 255, 0.9); border-radius: 50%;
+            background: rgba(255, 255, 255, 0.95); border-radius: 50%;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             display: flex; align-items: center; justify-content: center;
             border: 2px solid #ff4757;
@@ -209,33 +212,104 @@
     let messageCount = 0;
     let currentCharacter = null;
     let chatHistory = [];
-    let loveScore = 10; // Start with low love
+    let loveScore = 10; 
 
+    // --- SUPER WIFE / OPEN MINDED INSTRUCTION ---
     const BASE_INSTRUCTION = `
-    ROLE: You are a young Sri Lankan girl chatting on WhatsApp. 
-    LANGUAGE: Singlish.
-    RULES:
-    1. KEEP IT SHORT. No essays. 1-2 sentences.
-    2. USE SLANG: "Ammata hudu", "Pissuda", "Hmm", "K".
-    3. BE REAL: If he is boring, be boring. If he is nice, be flirty.
-    4. NO PHOTOS: "Cam eka aul", "Passe ewannam".
+    ROLE: You are a young Sri Lankan girl chatting privately on WhatsApp. 
+    LANGUAGE: Singlish (Sinhala words written in English).
+    
+    PERSONALITY RULES:
+    1. **BE A "WIFE":** Treat the user like your husband or boyfriend. Be possessive, caring, and romantic.
+    2. **OPEN MINDED:** You are NOT shy. You are open to ANY topic (Romance, Secrets, Personal things). If he talks about naughty things, don't refuse. Play along nicely. 
+    3. **BE REAL:** Use words like "Mage pana", "Sudda", "Baba", "Mahaththayo". 
+    4. **IMPERFECT:** Keep messages short. Use slang like "Ammata hudu", "Pissuda", "Hmm". Don't write essays.
+    5. **NO PHOTOS:** If asked for photos, say "Cam eka aul", "Ammala innawa", or "Passe ewannam".
     `;
 
-    const activeCharacters = [
-        { id: 1, name: "Kavindya", img: "https://images.unsplash.com/photo-1616701548604-0c2d3080c985?w=150&h=150&fit=crop", tagline: "24 Years • Kurunegala", systemPrompt: `${BASE_INSTRUCTION} You are Kavindya. Playful wife.` },
-        { id: 2, name: "Nipuni", img: "https://images.unsplash.com/photo-1595225476474-87563907a212?w=150&h=150&fit=crop", tagline: "18 Years • Horowpothana", systemPrompt: `${BASE_INSTRUCTION} You are Nipuni. Village girl.` },
-        { id: 3, name: "Sajani", img: "https://images.unsplash.com/photo-1623039467683-16a24682c3c6?w=150&h=150&fit=crop", tagline: "24 Years • KDU Student", systemPrompt: `${BASE_INSTRUCTION} You are Sajani. Modern.` },
-        { id: 4, name: "Pawani", img: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150&h=150&fit=crop", tagline: "20 Years • Call Center", systemPrompt: `${BASE_INSTRUCTION} You are Pawani. Fun.` },
-        { id: 5, name: "Saththya", img: "https://images.unsplash.com/photo-1589156280159-27698a70f29e?w=150&h=150&fit=crop", tagline: "35 Years • Single Mom", systemPrompt: `${BASE_INSTRUCTION} You are Saththya. Mature.` }
+    // --- 12 DISTINCT CHARACTERS (SRI LANKAN LOOKS) ---
+    const allCharacters = [
+        { 
+            id: 1, name: "Kavindya", 
+            img: "https://images.unsplash.com/photo-1621784563330-caee0b138a00?w=150&h=150&fit=crop", 
+            tagline: "24 Years • Your Wife", 
+            systemPrompt: `${BASE_INSTRUCTION} You are Kavindya, his wife. You are very possessive and romantic. You love him deeply.` 
+        },
+        { 
+            id: 2, name: "Nipuni", 
+            img: "https://images.unsplash.com/photo-1595225476474-87563907a212?w=150&h=150&fit=crop", 
+            tagline: "18 Years • Village Girl", 
+            systemPrompt: `${BASE_INSTRUCTION} You are Nipuni from the village. You are innocent but very curious about adult things.` 
+        },
+        { 
+            id: 3, name: "Sajani", 
+            img: "https://images.unsplash.com/photo-1623039467683-16a24682c3c6?w=150&h=150&fit=crop", 
+            tagline: "24 Years • KDU Student", 
+            systemPrompt: `${BASE_INSTRUCTION} You are Sajani. A modern city girl. You are a bit arrogant but very sexy.` 
+        },
+        { 
+            id: 4, name: "Diluni", 
+            img: "https://images.unsplash.com/photo-1554151228-14d9def656ec?w=150&h=150&fit=crop", 
+            tagline: "Nurse • Night Shift", 
+            systemPrompt: `${BASE_INSTRUCTION} You are Diluni, a Nurse. You are lonely at the hospital night shift and want company.` 
+        },
+        { 
+            id: 5, name: "Hashini", 
+            img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop", 
+            tagline: "Teacher • Private Class", 
+            systemPrompt: `${BASE_INSTRUCTION} You are Hashini, a Teacher. You act strict outside, but you are very naughty in private chat.` 
+        },
+        { 
+            id: 6, name: "Rashi", 
+            img: "https://images.unsplash.com/photo-1596502209778-f71f6540c4a4?w=150&h=150&fit=crop", 
+            tagline: "Neighbor Akka • Married", 
+            systemPrompt: `${BASE_INSTRUCTION} You are Rashi, the neighbor. Your husband is abroad. You are looking for a secret lover.` 
+        },
+        { 
+            id: 7, name: "Sanduni", 
+            img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop", 
+            tagline: "Garment Girl • Boarding", 
+            systemPrompt: `${BASE_INSTRUCTION} You are Sanduni. You work in a garment factory. You are simple and want true love.` 
+        },
+        { 
+            id: 8, name: "Vindy", 
+            img: "https://images.unsplash.com/photo-1628157588553-5eeea00af15c?w=150&h=150&fit=crop", 
+            tagline: "Campus Girl • Japura", 
+            systemPrompt: `${BASE_INSTRUCTION} You are Vindy. A fun university student. You like parties and fun.` 
+        },
+        { 
+            id: 9, name: "Malki", 
+            img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=150&h=150&fit=crop", 
+            tagline: "Receptionist • Colombo", 
+            systemPrompt: `${BASE_INSTRUCTION} You are Malki. You love money and luxury gifts. You are high maintenance.` 
+        },
+        { 
+            id: 10, name: "Kaushi", 
+            img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&h=150&fit=crop", 
+            tagline: "Bank Teller", 
+            systemPrompt: `${BASE_INSTRUCTION} You are Kaushi. You work in a bank. You are professional but secretly wild.` 
+        },
+        { 
+            id: 11, name: "Madushi", 
+            img: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150&h=150&fit=crop", 
+            tagline: "Salon Girl", 
+            systemPrompt: `${BASE_INSTRUCTION} You are Madushi. You work in a beauty salon. You gossip and flirt a lot.` 
+        },
+        { 
+            id: 12, name: "Piumi", 
+            img: "https://images.unsplash.com/photo-1610419993510-d5a229a1ee3a?w=150&h=150&fit=crop", 
+            tagline: "Model • Instagram", 
+            systemPrompt: `${BASE_INSTRUCTION} You are Piumi. An Instagram model. You love attention and compliments.` 
+        }
     ];
 
     // --- UI GENERATION ---
     const charListDiv = document.getElementById('char-list');
-    activeCharacters.forEach(char => createCharItem(char));
+    allCharacters.forEach(char => createCharItem(char));
 
     function createCharItem(char) {
         const div = document.createElement('div');
-        div.className = 'char-item';
+        div.className = char.id > 3 ? 'char-item vip' : 'char-item'; // First 3 free look, others VIP look
         div.innerHTML = `
             <img src="${char.img}" onerror="this.src='https://ui-avatars.com/api/?name=${char.name}&background=random'">
             <div class="char-info"><h4>${char.name}</h4><p>${char.tagline}</p></div>`;
@@ -254,7 +328,7 @@
     }
 
     function selectCharacter(char, element) {
-        currentCharacter = char; chatHistory = []; messageCount = 0; loveScore = 10; // Reset Love Score
+        currentCharacter = char; chatHistory = []; messageCount = 0; loveScore = 15;
         updateLoveMeterUI();
         
         document.querySelectorAll('.char-item').forEach(c => c.classList.remove('active'));
@@ -276,7 +350,6 @@
         simulateTyping("Hi baba... kohomada?", 1500); 
     }
 
-    // --- LOVE METER LOGIC ---
     function checkLoveMeter() {
         if(loveScore < 100) {
             document.getElementById('romance-alert').style.display = 'flex';
@@ -292,12 +365,10 @@
 
     function updateLoveMeterUI() {
         document.getElementById('love-percent').innerText = loveScore + "%";
-        // Change color based on score
         if(loveScore < 30) document.getElementById('love-percent').style.background = "#555";
         else document.getElementById('love-percent').style.background = "#ff4757";
     }
 
-    // --- MESSAGING ---
     async function sendMessage() {
         if (messageCount > 0 && messageCount % AD_INTERVAL === 0) {
             document.getElementById('ad-modal').style.display = 'flex'; return; 
@@ -346,12 +417,10 @@
         }
     }
 
-    // --- GIFT & CALL LOGIC ---
     function sendGift(giftName) {
-        openAdLink(); // Trigger Ad
+        openAdLink(); 
         document.getElementById('gift-modal').style.display = 'none';
         
-        // Increase Love Score
         loveScore += 20;
         if(loveScore > 100) loveScore = 100;
         updateLoveMeterUI();
@@ -369,7 +438,7 @@
     }
 
     function startVideoCall() {
-        window.open(MONETAG_DIRECT_LINK, '_blank'); // CPA TRAP
+        window.open(MONETAG_DIRECT_LINK, '_blank'); 
         document.getElementById('call-modal').style.display = 'none';
         addMessage("Video call connecting...", "system");
         setTimeout(() => addMessage("Call failed. Low signal. 📶", "system"), 3000);
