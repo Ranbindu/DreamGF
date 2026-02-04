@@ -17,10 +17,18 @@
             margin: 0; padding: 0; display: flex; height: 100dvh; overflow: hidden; 
         }
 
+        /* --- LAYOUT FIX (NEW) --- */
+        #app-content {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
         /* --- BLUR EFFECT FOR LOCK --- */
         .blur-content {
             filter: blur(5px);
-            pointer-events: none; /* Block clicks */
+            pointer-events: none;
             user-select: none;
         }
 
@@ -251,11 +259,9 @@
     window.onload = function() {
         const isUnlocked = localStorage.getItem('appUnlocked');
         if (!isUnlocked) {
-            // Lock the app
             document.getElementById('share-lock-modal').style.display = 'flex';
             document.getElementById('app-content').classList.add('blur-content');
         } else {
-            // App is already unlocked
             document.getElementById('share-lock-modal').style.display = 'none';
         }
     };
@@ -263,21 +269,16 @@
     function shareToUnlock() {
         const appLink = "https://ranbindu.github.io/DreamGF/";
         const message = "Me app eka balapanko! Lankwe kello ekka chat karanna puluwan. Pattamai! 👇\n\n" + appLink;
-        
-        // Open WhatsApp
         window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(message), '_blank');
         
-        // Unlock Logic (Simulated)
         document.querySelector('.share-unlock').innerText = "Verifying...";
-        
         setTimeout(() => {
             document.getElementById('share-lock-modal').style.display = 'none';
             document.getElementById('app-content').classList.remove('blur-content');
             localStorage.setItem('appUnlocked', 'true');
             alert("Unlocked Successfully! Welcome! ❤️");
-        }, 3000); // Wait 3 seconds to pretend checking
+        }, 3000); 
     }
-    // ------------------------
 
     let messageCount = 0;
     let currentCharacter = null;
