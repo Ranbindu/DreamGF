@@ -17,6 +17,13 @@
             margin: 0; padding: 0; display: flex; height: 100dvh; overflow: hidden; 
         }
 
+        /* --- BLUR EFFECT FOR LOCK --- */
+        .blur-content {
+            filter: blur(5px);
+            pointer-events: none; /* Block clicks */
+            user-select: none;
+        }
+
         /* --- SIDEBAR --- */
         #sidebar { background: white; display: flex; flex-direction: column; border-right: 1px solid #ddd; z-index: 1000; }
         .sidebar-header { padding: 10px 16px; background: #f0f2f5; border-bottom: 1px solid #d1d7db; height: 60px; display: flex; align-items: center; }
@@ -84,15 +91,12 @@
         .msg.user { align-self: flex-end; background: #d9fdd3; color: #111; }
         .msg.ai { align-self: flex-start; background: #ffffff; color: #111; }
         .msg.gift { align-self: flex-end; background: #fff2cc; border: 1px solid #ffd32a; text-align: center; }
-        
-        /* SYSTEM MESSAGE STYLE */
         .msg.system-note { 
             align-self: center; background: #ffeecd; color: #54656f; 
             font-size: 12px; padding: 5px 10px; border-radius: 20px; 
             box-shadow: none; border: 1px solid #e2dacc; margin: 10px 0;
             text-align: center; max-width: 90%;
         }
-
         .msg-time { float: right; margin-left: 8px; margin-top: 5px; font-size: 11px; color: #999; }
 
         #input-area { padding: 10px 16px; background: #f0f2f5; display: flex; align-items: center; gap: 10px; min-height: 62px; }
@@ -101,12 +105,21 @@
         button#gift-btn { font-size: 22px; background: none; border: none; cursor: pointer; padding: 5px; }
 
         /* --- MODALS --- */
-        #ad-modal, #gift-modal, #call-modal { 
+        #ad-modal, #gift-modal, #call-modal, #share-lock-modal { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 9999; 
         }
+        
+        /* SHARE LOCK MODAL SPECIFIC */
+        #share-lock-modal { 
+            background: rgba(0,0,0,0.95); /* Darker background */
+            z-index: 99999; /* Always on top */
+            display: flex; /* Show by default if script enables it */
+        }
+
         .modal-content { background: white; padding: 25px; border-radius: 15px; text-align: center; max-width: 300px; width: 85%; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
         .modal-btn { background: #00a884; color: white; padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; margin-top: 15px; width: 100%; font-weight: bold; font-size: 15px; }
+        .modal-btn.share-unlock { background: #128C7E; animation: pulse-green 2s infinite; font-size: 16px; }
         .modal-btn.cancel { background: #555; margin-top: 10px; }
         
         .gift-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
@@ -132,6 +145,18 @@
     </style>
 </head>
 <body>
+
+<div id="share-lock-modal">
+    <div class="modal-content">
+        <div style="font-size: 50px; margin-bottom: 10px;">🔒</div>
+        <h2 style="color:#111; margin:0 0 10px 0;">Unlock Chat</h2>
+        <p style="color:#555; font-size:14px; line-height: 1.5;">
+            To chat with these girls, please share this app to <b>5 WhatsApp Groups</b>.
+        </p>
+        <button class="modal-btn share-unlock" onclick="shareToUnlock()">🚀 Share on WhatsApp</button>
+        <p style="font-size:11px; color:#999; margin-top:10px;">Share to unlock instantly</p>
+    </div>
+</div>
 
 <div id="ad-modal">
     <div class="modal-content">
@@ -171,45 +196,47 @@
 
 <div id="overlay" onclick="toggleSidebar()"></div>
 
-<div id="sidebar">
-    <div class="sidebar-header">
-        <h3 style="margin:0; color:#54656f;">Lankan Chat ❤️</h3>
+<div id="app-content">
+    <div id="sidebar">
+        <div class="sidebar-header">
+            <h3 style="margin:0; color:#54656f;">Lankan Chat ❤️</h3>
+        </div>
+        <div id="char-list" style="overflow-y: auto; flex:1;"></div>
     </div>
-    <div id="char-list" style="overflow-y: auto; flex:1;"></div>
-</div>
 
-<div id="chat-area">
-    <div id="header">
-        <div class="menu-btn" onclick="toggleSidebar()">⬅️</div>
-        <img id="header-img" class="profile-pic" src="">
-        <div class="header-info">
-            <div id="header-name" class="header-name">Select a girl...</div>
-            <div class="header-status">online</div>
+    <div id="chat-area">
+        <div id="header">
+            <div class="menu-btn" onclick="toggleSidebar()">⬅️</div>
+            <img id="header-img" class="profile-pic" src="">
+            <div class="header-info">
+                <div id="header-name" class="header-name">Select a girl...</div>
+                <div class="header-status">online</div>
+            </div>
+            
+            <div class="call-cta-btn" onclick="document.getElementById('call-modal').style.display='flex'">
+                <span>📹</span> Click for Call
+            </div>
+        </div>
+
+        <div id="love-meter-container" onclick="checkLoveMeter()" style="display:none;">
+            <div class="love-icon">❤️</div>
+            <div id="love-percent" class="love-percent">10%</div>
         </div>
         
-        <div class="call-cta-btn" onclick="document.getElementById('call-modal').style.display='flex'">
-            <span>📹</span> Click for Call
+        <div id="messages">
+            <div style="text-align:center; margin-top:20%; color:#888;">
+                <h2>WhatsApp Web</h2>
+                <p>Select a girl to start chatting!</p>
+            </div>
         </div>
-    </div>
-
-    <div id="love-meter-container" onclick="checkLoveMeter()" style="display:none;">
-        <div class="love-icon">❤️</div>
-        <div id="love-percent" class="love-percent">10%</div>
-    </div>
-    
-    <div id="messages">
-        <div style="text-align:center; margin-top:20%; color:#888;">
-            <h2>WhatsApp Web</h2>
-            <p>Select a girl to start chatting!</p>
+        
+        <div id="typing-indicator" style="font-size:12px; color:#666; padding:5px 20px; display:none; background:#efeae2;">Typing...</div>
+        
+        <div id="input-area">
+            <button id="gift-btn" onclick="document.getElementById('gift-modal').style.display='flex'" disabled>🎁</button>
+            <input type="text" id="user-input" placeholder="Type a message" disabled>
+            <button id="send-btn" onclick="sendMessage()" disabled>➤</button>
         </div>
-    </div>
-    
-    <div id="typing-indicator" style="font-size:12px; color:#666; padding:5px 20px; display:none; background:#efeae2;">Typing...</div>
-    
-    <div id="input-area">
-        <button id="gift-btn" onclick="document.getElementById('gift-modal').style.display='flex'" disabled>🎁</button>
-        <input type="text" id="user-input" placeholder="Type a message" disabled>
-        <button id="send-btn" onclick="sendMessage()" disabled>➤</button>
     </div>
 </div>
 
@@ -220,69 +247,87 @@
     const AD_INTERVAL = 4;
     // =================================================
 
+    // --- SHARE LOCK LOGIC ---
+    window.onload = function() {
+        const isUnlocked = localStorage.getItem('appUnlocked');
+        if (!isUnlocked) {
+            // Lock the app
+            document.getElementById('share-lock-modal').style.display = 'flex';
+            document.getElementById('app-content').classList.add('blur-content');
+        } else {
+            // App is already unlocked
+            document.getElementById('share-lock-modal').style.display = 'none';
+        }
+    };
+
+    function shareToUnlock() {
+        const appLink = "https://ranbindu.github.io/DreamGF/";
+        const message = "Me app eka balapanko! Lankwe kello ekka chat karanna puluwan. Pattamai! 👇\n\n" + appLink;
+        
+        // Open WhatsApp
+        window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(message), '_blank');
+        
+        // Unlock Logic (Simulated)
+        document.querySelector('.share-unlock').innerText = "Verifying...";
+        
+        setTimeout(() => {
+            document.getElementById('share-lock-modal').style.display = 'none';
+            document.getElementById('app-content').classList.remove('blur-content');
+            localStorage.setItem('appUnlocked', 'true');
+            alert("Unlocked Successfully! Welcome! ❤️");
+        }, 3000); // Wait 3 seconds to pretend checking
+    }
+    // ------------------------
+
     let messageCount = 0;
     let currentCharacter = null;
     let chatHistory = [];
     let loveScore = 10; 
 
-    // --- SYSTEM PROMPT ---
     const BASE_INSTRUCTION = `
     ROLE: You are a young Sri Lankan girl chatting privately. 
-    LANGUAGE: Singlish (Sinhala words written in English).
-    RULES:
-    1. **ACT NATURAL:** Talk like a real girl. Use "Mage pana", "Sudda", "Baba". 
-    2. **OPEN MINDED:** Do not be shy. Talk about anything. 
-    3. **SHORT REPLIES:** Don't write essays. 1-2 sentences max.
-    4. **NO ROBOT TALK:** Never mention "Love Meter" or "System".
-    5. **NO PHOTOS:** If asked, say "Cam eka aul" or "Passe ewannam".
+    LANGUAGE: Singlish.
+    RULES: ACT NATURAL. OPEN MINDED. SHORT REPLIES. NO PHOTOS.
     `;
 
-    // --- 30 REALISTIC SRI LANKAN CHARACTERS ---
     const allCharacters = [
-        // --- FREE CHARACTERS (First 3) ---
-        { id: 1, name: "Kavindya", img: "https://images.unsplash.com/photo-1621784563330-caee0b138a00?w=150&h=150&fit=crop", tagline: "24 Years • Wife", systemPrompt: `${BASE_INSTRUCTION} You are Kavindya, his wife. Very romantic and caring.` },
-        { id: 2, name: "Nipuni", img: "https://images.unsplash.com/photo-1595225476474-87563907a212?w=150&h=150&fit=crop", tagline: "18 Years • Village Girl", systemPrompt: `${BASE_INSTRUCTION} You are Nipuni. Innocent village girl.` },
-        { id: 3, name: "Sajani", img: "https://images.unsplash.com/photo-1623039467683-16a24682c3c6?w=150&h=150&fit=crop", tagline: "24 Years • Campus", systemPrompt: `${BASE_INSTRUCTION} You are Sajani. Modern girl. A bit arrogant.` },
-        
-        // --- VIP CHARACTERS (Next 27) ---
-        { id: 4, name: "Diluni", img: "https://images.unsplash.com/photo-1554151228-14d9def656ec?w=150&h=150&fit=crop", tagline: "Nurse • Night Shift", systemPrompt: `${BASE_INSTRUCTION} You are Diluni, a Nurse. Lonely at night.` },
-        { id: 5, name: "Hashini", img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop", tagline: "Teacher", systemPrompt: `${BASE_INSTRUCTION} You are Hashini, a Teacher. Strict but naughty.` },
-        { id: 6, name: "Rashi", img: "https://images.unsplash.com/photo-1596502209778-f71f6540c4a4?w=150&h=150&fit=crop", tagline: "Neighbor Akka", systemPrompt: `${BASE_INSTRUCTION} You are Rashi, the neighbor Akka. Looking for fun.` },
-        { id: 7, name: "Sanduni", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop", tagline: "Garment Girl", systemPrompt: `${BASE_INSTRUCTION} You are Sanduni. Simple garment girl.` },
-        { id: 8, name: "Malki", img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=150&h=150&fit=crop", tagline: "Receptionist", systemPrompt: `${BASE_INSTRUCTION} You are Malki. High class girl.` },
-        { id: 9, name: "Kaushi", img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&h=150&fit=crop", tagline: "Bank Teller", systemPrompt: `${BASE_INSTRUCTION} You are Kaushi. Bank girl.` },
-        { id: 10, name: "Madushi", img: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150&h=150&fit=crop", tagline: "Salon Girl", systemPrompt: `${BASE_INSTRUCTION} You are Madushi. Gossip and fun.` },
-        
-        // --- 20 NEW CHARACTERS (VIP) ---
-        { id: 11, name: "Ama", img: "https://images.unsplash.com/photo-1583407949977-42446053425c?w=150&h=150&fit=crop", tagline: "Ayurvedic Doctor", systemPrompt: `${BASE_INSTRUCTION} You are Ama, an Ayurvedic Doctor. Calm and traditional.` },
-        { id: 12, name: "Chamari", img: "https://images.unsplash.com/photo-1616089635872-340233601020?w=150&h=150&fit=crop", tagline: "Cricket Player", systemPrompt: `${BASE_INSTRUCTION} You are Chamari. You love sports and are very energetic.` },
-        { id: 13, name: "Erandi", img: "https://images.unsplash.com/photo-1592621385612-4d71294d9263?w=150&h=150&fit=crop", tagline: "Housewife", systemPrompt: `${BASE_INSTRUCTION} You are Erandi, a lonely housewife looking for a friend.` },
-        { id: 14, name: "Gayani", img: "https://images.unsplash.com/photo-1573152052338-02512036115e?w=150&h=150&fit=crop", tagline: "HR Manager", systemPrompt: `${BASE_INSTRUCTION} You are Gayani, a professional HR manager. Serious during the day, fun at night.` },
-        { id: 15, name: "Hansi", img: "https://images.unsplash.com/photo-1614283233556-f35b0c801ef1?w=150&h=150&fit=crop", tagline: "Preschool Teacher", systemPrompt: `${BASE_INSTRUCTION} You are Hansi. You love kids and are very sweet.` },
-        { id: 16, name: "Imasha", img: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=150&h=150&fit=crop", tagline: "Software Engineer", systemPrompt: `${BASE_INSTRUCTION} You are Imasha, a tech girl. Smart and geeky.` },
-        { id: 17, name: "Jayani", img: "https://images.unsplash.com/photo-1599450033174-740384143522?w=150&h=150&fit=crop", tagline: "Yoga Instructor", systemPrompt: `${BASE_INSTRUCTION} You are Jayani. Flexible and spiritual.` },
-        { id: 18, name: "Kalpani", img: "https://images.unsplash.com/photo-1589993335308-047072818800?w=150&h=150&fit=crop", tagline: "Law Student", systemPrompt: `${BASE_INSTRUCTION} You are Kalpani, studying law. You like to argue playfully.` },
-        { id: 19, name: "Lakmini", img: "https://images.unsplash.com/photo-1564149504817-d1378368526f?w=150&h=150&fit=crop", tagline: "Air Hostess", systemPrompt: `${BASE_INSTRUCTION} You are Lakmini. You travel the world and are very glamorous.` },
-        { id: 20, name: "Madhuri", img: "https://images.unsplash.com/photo-1629019897386-619983331634?w=150&h=150&fit=crop", tagline: "Dancing Teacher", systemPrompt: `${BASE_INSTRUCTION} You are Madhuri. You express yourself through dance.` },
-        { id: 21, name: "Nadeesha", img: "https://images.unsplash.com/photo-1616805830923-986196444296?w=150&h=150&fit=crop", tagline: "Radio RJ", systemPrompt: `${BASE_INSTRUCTION} You are Nadeesha. You have a lovely voice and talk a lot.` },
-        { id: 22, name: "Oshadi", img: "https://images.unsplash.com/photo-1621012430307-b47747d66d26?w=150&h=150&fit=crop", tagline: "Fashion Designer", systemPrompt: `${BASE_INSTRUCTION} You are Oshadi. Very stylish and trendy.` },
-        { id: 23, name: "Prabodha", img: "https://images.unsplash.com/photo-1596815064285-45ed8a9c0463?w=150&h=150&fit=crop", tagline: "Government Servant", systemPrompt: `${BASE_INSTRUCTION} You are Prabodha. You work in a government office and are very traditional.` },
-        { id: 24, name: "Ruwani", img: "https://images.unsplash.com/photo-1581325151810-320278016641?w=150&h=150&fit=crop", tagline: "Chef", systemPrompt: `${BASE_INSTRUCTION} You are Ruwani. You love cooking and feeding people.` },
-        { id: 25, name: "Subashini", img: "https://images.unsplash.com/photo-1617170899057-0704c296d010?w=150&h=150&fit=crop", tagline: "Single Mom", systemPrompt: `${BASE_INSTRUCTION} You are Subashini. A strong single mom looking for a partner.` },
-        { id: 26, name: "Tharushi", img: "https://images.unsplash.com/photo-1595859703065-222680553999?w=150&h=150&fit=crop", tagline: "Campus Student - Pera", systemPrompt: `${BASE_INSTRUCTION} You are Tharushi from Peradeniya Uni. Intelligent and beautiful.` },
-        { id: 27, name: "Udayangani", img: "https://images.unsplash.com/photo-1615022702095-ff2c036f3439?w=150&h=150&fit=crop", tagline: "Music Teacher", systemPrompt: `${BASE_INSTRUCTION} You are Udayangani. You play the piano and sing beautifully.` },
-        { id: 28, name: "Vishaka", img: "https://images.unsplash.com/photo-1606335543042-57c525922933?w=150&h=150&fit=crop", tagline: "Writer", systemPrompt: `${BASE_INSTRUCTION} You are Vishaka. A dreamy writer who is very romantic.` },
-        { id: 29, name: "Yashoda", img: "https://images.unsplash.com/photo-1558282177-b7326b4c7629?w=150&h=150&fit=crop", tagline: "Call Center Agent", systemPrompt: `${BASE_INSTRUCTION} You are Yashoda. You work night shifts and get bored.` },
-        { id: 30, name: "Zoyaa", img: "https://images.unsplash.com/photo-1623184663110-89930294830c?w=150&h=150&fit=crop", tagline: "Makeup Artist", systemPrompt: `${BASE_INSTRUCTION} You are Zoyaa. You love beauty and gossip.` }
+        { id: 1, name: "Kavindya", img: "https://images.unsplash.com/photo-1621784563330-caee0b138a00?w=150&h=150&fit=crop", tagline: "24 Years • Wife", systemPrompt: `${BASE_INSTRUCTION} You are Kavindya, his wife.` },
+        { id: 2, name: "Nipuni", img: "https://images.unsplash.com/photo-1595225476474-87563907a212?w=150&h=150&fit=crop", tagline: "18 Years • Village Girl", systemPrompt: `${BASE_INSTRUCTION} You are Nipuni. Innocent.` },
+        { id: 3, name: "Sajani", img: "https://images.unsplash.com/photo-1623039467683-16a24682c3c6?w=150&h=150&fit=crop", tagline: "24 Years • Campus", systemPrompt: `${BASE_INSTRUCTION} You are Sajani. Modern.` },
+        { id: 4, name: "Diluni", img: "https://images.unsplash.com/photo-1554151228-14d9def656ec?w=150&h=150&fit=crop", tagline: "Nurse • Night Shift", systemPrompt: `${BASE_INSTRUCTION} You are Diluni.` },
+        { id: 5, name: "Hashini", img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop", tagline: "Teacher", systemPrompt: `${BASE_INSTRUCTION} You are Hashini.` },
+        { id: 6, name: "Rashi", img: "https://images.unsplash.com/photo-1596502209778-f71f6540c4a4?w=150&h=150&fit=crop", tagline: "Neighbor Akka", systemPrompt: `${BASE_INSTRUCTION} You are Rashi.` },
+        { id: 7, name: "Sanduni", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop", tagline: "Garment Girl", systemPrompt: `${BASE_INSTRUCTION} You are Sanduni.` },
+        { id: 8, name: "Malki", img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=150&h=150&fit=crop", tagline: "Receptionist", systemPrompt: `${BASE_INSTRUCTION} You are Malki.` },
+        { id: 9, name: "Kaushi", img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&h=150&fit=crop", tagline: "Bank Teller", systemPrompt: `${BASE_INSTRUCTION} You are Kaushi.` },
+        { id: 10, name: "Madushi", img: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150&h=150&fit=crop", tagline: "Salon Girl", systemPrompt: `${BASE_INSTRUCTION} You are Madushi.` },
+        { id: 11, name: "Ama", img: "https://images.unsplash.com/photo-1583407949977-42446053425c?w=150&h=150&fit=crop", tagline: "Ayurvedic Doctor", systemPrompt: `${BASE_INSTRUCTION} You are Ama.` },
+        { id: 12, name: "Chamari", img: "https://images.unsplash.com/photo-1616089635872-340233601020?w=150&h=150&fit=crop", tagline: "Cricket Player", systemPrompt: `${BASE_INSTRUCTION} You are Chamari.` },
+        { id: 13, name: "Erandi", img: "https://images.unsplash.com/photo-1592621385612-4d71294d9263?w=150&h=150&fit=crop", tagline: "Housewife", systemPrompt: `${BASE_INSTRUCTION} You are Erandi.` },
+        { id: 14, name: "Gayani", img: "https://images.unsplash.com/photo-1573152052338-02512036115e?w=150&h=150&fit=crop", tagline: "HR Manager", systemPrompt: `${BASE_INSTRUCTION} You are Gayani.` },
+        { id: 15, name: "Hansi", img: "https://images.unsplash.com/photo-1614283233556-f35b0c801ef1?w=150&h=150&fit=crop", tagline: "Preschool Teacher", systemPrompt: `${BASE_INSTRUCTION} You are Hansi.` },
+        { id: 16, name: "Imasha", img: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=150&h=150&fit=crop", tagline: "Software Engineer", systemPrompt: `${BASE_INSTRUCTION} You are Imasha.` },
+        { id: 17, name: "Jayani", img: "https://images.unsplash.com/photo-1599450033174-740384143522?w=150&h=150&fit=crop", tagline: "Yoga Instructor", systemPrompt: `${BASE_INSTRUCTION} You are Jayani.` },
+        { id: 18, name: "Kalpani", img: "https://images.unsplash.com/photo-1589993335308-047072818800?w=150&h=150&fit=crop", tagline: "Law Student", systemPrompt: `${BASE_INSTRUCTION} You are Kalpani.` },
+        { id: 19, name: "Lakmini", img: "https://images.unsplash.com/photo-1564149504817-d1378368526f?w=150&h=150&fit=crop", tagline: "Air Hostess", systemPrompt: `${BASE_INSTRUCTION} You are Lakmini.` },
+        { id: 20, name: "Madhuri", img: "https://images.unsplash.com/photo-1629019897386-619983331634?w=150&h=150&fit=crop", tagline: "Dancing Teacher", systemPrompt: `${BASE_INSTRUCTION} You are Madhuri.` },
+        { id: 21, name: "Nadeesha", img: "https://images.unsplash.com/photo-1616805830923-986196444296?w=150&h=150&fit=crop", tagline: "Radio RJ", systemPrompt: `${BASE_INSTRUCTION} You are Nadeesha.` },
+        { id: 22, name: "Oshadi", img: "https://images.unsplash.com/photo-1621012430307-b47747d66d26?w=150&h=150&fit=crop", tagline: "Fashion Designer", systemPrompt: `${BASE_INSTRUCTION} You are Oshadi.` },
+        { id: 23, name: "Prabodha", img: "https://images.unsplash.com/photo-1596815064285-45ed8a9c0463?w=150&h=150&fit=crop", tagline: "Government Servant", systemPrompt: `${BASE_INSTRUCTION} You are Prabodha.` },
+        { id: 24, name: "Ruwani", img: "https://images.unsplash.com/photo-1581325151810-320278016641?w=150&h=150&fit=crop", tagline: "Chef", systemPrompt: `${BASE_INSTRUCTION} You are Ruwani.` },
+        { id: 25, name: "Subashini", img: "https://images.unsplash.com/photo-1617170899057-0704c296d010?w=150&h=150&fit=crop", tagline: "Single Mom", systemPrompt: `${BASE_INSTRUCTION} You are Subashini.` },
+        { id: 26, name: "Tharushi", img: "https://images.unsplash.com/photo-1595859703065-222680553999?w=150&h=150&fit=crop", tagline: "Campus Student - Pera", systemPrompt: `${BASE_INSTRUCTION} You are Tharushi.` },
+        { id: 27, name: "Udayangani", img: "https://images.unsplash.com/photo-1615022702095-ff2c036f3439?w=150&h=150&fit=crop", tagline: "Music Teacher", systemPrompt: `${BASE_INSTRUCTION} You are Udayangani.` },
+        { id: 28, name: "Vishaka", img: "https://images.unsplash.com/photo-1606335543042-57c525922933?w=150&h=150&fit=crop", tagline: "Writer", systemPrompt: `${BASE_INSTRUCTION} You are Vishaka.` },
+        { id: 29, name: "Yashoda", img: "https://images.unsplash.com/photo-1558282177-b7326b4c7629?w=150&h=150&fit=crop", tagline: "Call Center Agent", systemPrompt: `${BASE_INSTRUCTION} You are Yashoda.` },
+        { id: 30, name: "Zoyaa", img: "https://images.unsplash.com/photo-1623184663110-89930294830c?w=150&h=150&fit=crop", tagline: "Makeup Artist", systemPrompt: `${BASE_INSTRUCTION} You are Zoyaa.` }
     ];
 
-    // --- UI GENERATION ---
     const charListDiv = document.getElementById('char-list');
     allCharacters.forEach(char => createCharItem(char));
 
     function createCharItem(char) {
         const div = document.createElement('div');
-        // First 3 are free, rest are VIP
         div.className = char.id > 3 ? 'char-item vip' : 'char-item';
         div.innerHTML = `
             <img src="${char.img}" onerror="this.src='https://ui-avatars.com/api/?name=${char.name}&background=random'">
@@ -291,7 +336,6 @@
         charListDiv.appendChild(div);
     }
 
-    // --- CORE LOGIC ---
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
@@ -304,28 +348,22 @@
     function selectCharacter(char, element) {
         currentCharacter = char; chatHistory = []; messageCount = 0; loveScore = 15;
         updateLoveMeterUI();
-        
         document.querySelectorAll('.char-item').forEach(c => c.classList.remove('active'));
         if(element) element.classList.add('active');
-
         document.getElementById('header-name').innerText = char.name;
         document.getElementById('header-img').src = char.img;
         document.getElementById('love-meter-container').style.display = 'flex';
-        
         document.getElementById('messages').innerHTML = '';
         document.getElementById('user-input').disabled = false;
         document.getElementById('send-btn').disabled = false;
         document.getElementById('gift-btn').disabled = false;
-        
         document.getElementById('user-input').focus();
         if (window.innerWidth <= 768) { document.getElementById('sidebar').classList.remove('show'); document.getElementById('overlay').style.display = 'none'; }
-
         chatHistory.push({ role: "system", content: char.systemPrompt });
         simulateTyping("Hi baba... kohomada?", 1500); 
     }
 
     function checkLoveMeter() {
-        // SYSTEM MESSAGE ONLY
         if(loveScore < 100) {
             addMessage("⚠️ <b>System Alert:</b> She feels bored. Send a Gift to increase romance!", "system-note");
             document.getElementById('gift-modal').style.display = 'flex';
@@ -344,80 +382,48 @@
         if (messageCount > 0 && messageCount % AD_INTERVAL === 0) {
             document.getElementById('ad-modal').style.display = 'flex'; return; 
         }
-
         const inputField = document.getElementById('user-input');
         const userText = inputField.value.trim();
         if (!userText) return;
-
         addMessage(userText, 'user');
         inputField.value = ''; inputField.focus(); 
-        
         chatHistory.push({ role: "user", content: userText });
         messageCount++; 
-        
         document.getElementById('typing-indicator').style.display = 'block';
-        const messagesDiv = document.getElementById('messages');
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
+        document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
         try {
             const response = await fetch(WORKER_URL, {
                 method: "POST", headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ "model": "google/gemini-2.5-flash", "messages": chatHistory })
             });
-
             const data = await response.json();
             if(data.error) throw new Error(JSON.stringify(data.error));
-            
             let aiReply = data.choices[0].message.content;
             aiReply = aiReply.replace('[SEND_PHOTO]', "Mata photo ewanna ba baba, api katha karamu.");
-            
             chatHistory.push({ role: "assistant", content: aiReply });
-
             let typingDelay = (aiReply.length * 30) + 1000;
             if (typingDelay > 5000) typingDelay = 5000; 
-
             setTimeout(() => {
                 document.getElementById('typing-indicator').style.display = 'none';
                 addMessage(aiReply, 'ai');
             }, typingDelay);
-
         } catch (error) {
-            console.error(error);
             document.getElementById('typing-indicator').style.display = 'none';
-            addMessage("Network Error. Please try again.", 'system-note');
+            addMessage("Network Error.", 'system-note');
         }
     }
 
     function sendGift(giftName) {
-        openAdLink(); 
-        document.getElementById('gift-modal').style.display = 'none';
-        
-        loveScore += 20;
-        if(loveScore > 100) loveScore = 100;
-        updateLoveMeterUI();
-
-        const giftMsg = `Sent a Gift: ${giftName}`;
-        addMessage(giftMsg, 'gift');
-        
-        // 1. SYSTEM CONFIRMATION
-        setTimeout(() => {
-            addMessage(`🎁 <b>System:</b> ${giftName} delivered! Love Meter increased +20%`, "system-note");
-        }, 500);
-
-        // 2. NATURAL GIRL REACTION
+        openAdLink(); document.getElementById('gift-modal').style.display = 'none';
+        loveScore += 20; if(loveScore > 100) loveScore = 100; updateLoveMeterUI();
+        addMessage(`Sent a Gift: ${giftName}`, 'gift');
+        setTimeout(() => { addMessage(`🎁 <b>System:</b> Delivered! +20% Romance`, "system-note"); }, 500);
         setTimeout(() => {
             document.getElementById('typing-indicator').style.display = 'block';
             setTimeout(() => {
                 document.getElementById('typing-indicator').style.display = 'none';
-                // Pick a random natural response
-                const replies = [
-                    "Shaa thank you baba! 😍",
-                    "Ane mata harima sathutui! ❤️",
-                    "Wow! Oya hari hodai.. 😘",
-                    "Thank you patiyo! 💋"
-                ];
-                const randomReply = replies[Math.floor(Math.random() * replies.length)];
-                addMessage(randomReply, 'ai');
+                const replies = ["Shaa thank you baba! 😍", "Ane mata harima sathutui! ❤️", "Wow! Oya hari hodai.. 😘", "Thank you patiyo! 💋"];
+                addMessage(replies[Math.floor(Math.random() * replies.length)], 'ai');
             }, 2000);
         }, 1000);
     }
@@ -425,47 +431,31 @@
     function startVideoCall() {
         window.open(MONETAG_DIRECT_LINK, '_blank'); 
         document.getElementById('call-modal').style.display = 'none';
-        addMessage("📶 <b>System:</b> Connecting video call...", "system-note");
-        setTimeout(() => addMessage("⚠️ <b>System:</b> Network error. Please try again later.", "system-note"), 3000);
+        addMessage("📶 <b>System:</b> Connecting...", "system-note");
+        setTimeout(() => addMessage("⚠️ <b>System:</b> Network error. Try later.", "system-note"), 3000);
     }
 
     function openAdLink() {
         window.open(MONETAG_DIRECT_LINK, '_blank'); 
         document.getElementById('ad-modal').style.display = 'none';
-        if(document.getElementById('ad-modal').style.display === 'flex') {
-             addMessage("Reconnected successfully! ✅", 'system-note');
-             messageCount++; 
-        }
-        document.getElementById('user-input').focus();
+        if(document.getElementById('ad-modal').style.display === 'flex') { addMessage("Reconnected!", 'system-note'); messageCount++; }
     }
 
     function simulateTyping(text, delay) {
         document.getElementById('typing-indicator').style.display = 'block';
-        setTimeout(() => {
-            document.getElementById('typing-indicator').style.display = 'none';
-            addMessage(text, 'ai');
-        }, delay);
+        setTimeout(() => { document.getElementById('typing-indicator').style.display = 'none'; addMessage(text, 'ai'); }, delay);
     }
 
     function addMessage(text, sender) {
         const div = document.createElement('div');
         div.className = `msg ${sender}`;
-        
-        if (sender === 'system-note') {
-            div.innerHTML = text; // HTML allowed for system messages
-        } else {
-            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            div.innerHTML = `${text} <span class="msg-time">${time}</span>`;
-        }
-        
-        const msgs = document.getElementById('messages');
-        msgs.appendChild(div);
-        msgs.scrollTop = msgs.scrollHeight;
+        if (sender === 'system-note') { div.innerHTML = text; } 
+        else { div.innerHTML = `${text} <span class="msg-time">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>`; }
+        document.getElementById('messages').appendChild(div);
+        document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
     }
 
-    document.getElementById("user-input").addEventListener("keypress", function(event) {
-        if (event.key === "Enter") sendMessage();
-    });
+    document.getElementById("user-input").addEventListener("keypress", function(event) { if (event.key === "Enter") sendMessage(); });
 </script>
 
 </body>
