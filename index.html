@@ -36,9 +36,19 @@
         #chat-area { flex: 1; display: flex; flex-direction: column; background-color: #efeae2; position: relative; }
         #header { padding: 0 16px; background: #f0f2f5; color: #54656f; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #d1d7db; height: 60px; }
         
-        /* VIDEO CALL BUTTON */
-        .video-btn { font-size: 24px; cursor: pointer; color: #00a884; margin-left: auto; transition: 0.2s; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        /* WHATSAPP CALL BUTTON STYLE */
+        .call-cta-btn {
+            background: #25D366; color: white; padding: 6px 12px; border-radius: 20px;
+            font-size: 12px; font-weight: bold; display: flex; align-items: center;
+            gap: 6px; cursor: pointer; margin-left: auto; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            animation: pulse-green 1.5s infinite; border: 1px solid #1ebd56;
+        }
+        .call-cta-btn span { font-size: 16px; }
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); transform: scale(1); }
+            70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); transform: scale(1.05); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); transform: scale(1); }
+        }
 
         .menu-btn { font-size: 24px; cursor: pointer; padding: 5px; color: #54656f; }
         .profile-pic { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
@@ -75,7 +85,7 @@
         .msg.ai { align-self: flex-start; background: #ffffff; color: #111; }
         .msg.gift { align-self: flex-end; background: #fff2cc; border: 1px solid #ffd32a; text-align: center; }
         
-        /* SYSTEM MESSAGE STYLE (New) */
+        /* SYSTEM MESSAGE STYLE */
         .msg.system-note { 
             align-self: center; background: #ffeecd; color: #54656f; 
             font-size: 12px; padding: 5px 10px; border-radius: 20px; 
@@ -176,7 +186,10 @@
             <div id="header-name" class="header-name">Select a girl...</div>
             <div class="header-status">online</div>
         </div>
-        <div class="video-btn" onclick="document.getElementById('call-modal').style.display='flex'">📹</div>
+        
+        <div class="call-cta-btn" onclick="document.getElementById('call-modal').style.display='flex'">
+            <span>📹</span> Click for Call
+        </div>
     </div>
 
     <div id="love-meter-container" onclick="checkLoveMeter()" style="display:none;">
@@ -224,68 +237,43 @@
     5. **NO PHOTOS:** If asked, say "Cam eka aul" or "Passe ewannam".
     `;
 
-    // --- 10 REALISTIC SRI LANKAN CHARACTERS ---
+    // --- 30 REALISTIC SRI LANKAN CHARACTERS ---
     const allCharacters = [
-        { 
-            id: 1, name: "Kavindya", 
-            img: "https://images.unsplash.com/photo-1621784563330-caee0b138a00?w=150&h=150&fit=crop", 
-            tagline: "24 Years • Wife", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Kavindya, his wife. Very romantic and caring.` 
-        },
-        { 
-            id: 2, name: "Nipuni", 
-            img: "https://images.unsplash.com/photo-1595225476474-87563907a212?w=150&h=150&fit=crop", 
-            tagline: "18 Years • Village Girl", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Nipuni. Innocent village girl.` 
-        },
-        { 
-            id: 3, name: "Sajani", 
-            img: "https://images.unsplash.com/photo-1623039467683-16a24682c3c6?w=150&h=150&fit=crop", 
-            tagline: "24 Years • Campus", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Sajani. Modern girl. A bit arrogant.` 
-        },
-        { 
-            id: 4, name: "Diluni", 
-            img: "https://images.unsplash.com/photo-1554151228-14d9def656ec?w=150&h=150&fit=crop", 
-            tagline: "Nurse • Night Shift", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Diluni, a Nurse. Lonely at night.` 
-        },
-        { 
-            id: 5, name: "Hashini", 
-            img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop", 
-            tagline: "Teacher", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Hashini, a Teacher. Strict but naughty.` 
-        },
-        { 
-            id: 6, name: "Rashi", 
-            img: "https://images.unsplash.com/photo-1596502209778-f71f6540c4a4?w=150&h=150&fit=crop", 
-            tagline: "Neighbor Akka", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Rashi, the neighbor Akka. Looking for fun.` 
-        },
-        { 
-            id: 7, name: "Sanduni", 
-            img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop", 
-            tagline: "Garment Girl", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Sanduni. Simple garment girl.` 
-        },
-        { 
-            id: 8, name: "Malki", 
-            img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=150&h=150&fit=crop", 
-            tagline: "Receptionist", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Malki. High class girl.` 
-        },
-        { 
-            id: 9, name: "Kaushi", 
-            img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&h=150&fit=crop", 
-            tagline: "Bank Teller", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Kaushi. Bank girl.` 
-        },
-        { 
-            id: 10, name: "Madushi", 
-            img: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150&h=150&fit=crop", 
-            tagline: "Salon Girl", 
-            systemPrompt: `${BASE_INSTRUCTION} You are Madushi. Gossip and fun.` 
-        }
+        // --- FREE CHARACTERS (First 3) ---
+        { id: 1, name: "Kavindya", img: "https://images.unsplash.com/photo-1621784563330-caee0b138a00?w=150&h=150&fit=crop", tagline: "24 Years • Wife", systemPrompt: `${BASE_INSTRUCTION} You are Kavindya, his wife. Very romantic and caring.` },
+        { id: 2, name: "Nipuni", img: "https://images.unsplash.com/photo-1595225476474-87563907a212?w=150&h=150&fit=crop", tagline: "18 Years • Village Girl", systemPrompt: `${BASE_INSTRUCTION} You are Nipuni. Innocent village girl.` },
+        { id: 3, name: "Sajani", img: "https://images.unsplash.com/photo-1623039467683-16a24682c3c6?w=150&h=150&fit=crop", tagline: "24 Years • Campus", systemPrompt: `${BASE_INSTRUCTION} You are Sajani. Modern girl. A bit arrogant.` },
+        
+        // --- VIP CHARACTERS (Next 27) ---
+        { id: 4, name: "Diluni", img: "https://images.unsplash.com/photo-1554151228-14d9def656ec?w=150&h=150&fit=crop", tagline: "Nurse • Night Shift", systemPrompt: `${BASE_INSTRUCTION} You are Diluni, a Nurse. Lonely at night.` },
+        { id: 5, name: "Hashini", img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop", tagline: "Teacher", systemPrompt: `${BASE_INSTRUCTION} You are Hashini, a Teacher. Strict but naughty.` },
+        { id: 6, name: "Rashi", img: "https://images.unsplash.com/photo-1596502209778-f71f6540c4a4?w=150&h=150&fit=crop", tagline: "Neighbor Akka", systemPrompt: `${BASE_INSTRUCTION} You are Rashi, the neighbor Akka. Looking for fun.` },
+        { id: 7, name: "Sanduni", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop", tagline: "Garment Girl", systemPrompt: `${BASE_INSTRUCTION} You are Sanduni. Simple garment girl.` },
+        { id: 8, name: "Malki", img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=150&h=150&fit=crop", tagline: "Receptionist", systemPrompt: `${BASE_INSTRUCTION} You are Malki. High class girl.` },
+        { id: 9, name: "Kaushi", img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&h=150&fit=crop", tagline: "Bank Teller", systemPrompt: `${BASE_INSTRUCTION} You are Kaushi. Bank girl.` },
+        { id: 10, name: "Madushi", img: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150&h=150&fit=crop", tagline: "Salon Girl", systemPrompt: `${BASE_INSTRUCTION} You are Madushi. Gossip and fun.` },
+        
+        // --- 20 NEW CHARACTERS (VIP) ---
+        { id: 11, name: "Ama", img: "https://images.unsplash.com/photo-1583407949977-42446053425c?w=150&h=150&fit=crop", tagline: "Ayurvedic Doctor", systemPrompt: `${BASE_INSTRUCTION} You are Ama, an Ayurvedic Doctor. Calm and traditional.` },
+        { id: 12, name: "Chamari", img: "https://images.unsplash.com/photo-1616089635872-340233601020?w=150&h=150&fit=crop", tagline: "Cricket Player", systemPrompt: `${BASE_INSTRUCTION} You are Chamari. You love sports and are very energetic.` },
+        { id: 13, name: "Erandi", img: "https://images.unsplash.com/photo-1592621385612-4d71294d9263?w=150&h=150&fit=crop", tagline: "Housewife", systemPrompt: `${BASE_INSTRUCTION} You are Erandi, a lonely housewife looking for a friend.` },
+        { id: 14, name: "Gayani", img: "https://images.unsplash.com/photo-1573152052338-02512036115e?w=150&h=150&fit=crop", tagline: "HR Manager", systemPrompt: `${BASE_INSTRUCTION} You are Gayani, a professional HR manager. Serious during the day, fun at night.` },
+        { id: 15, name: "Hansi", img: "https://images.unsplash.com/photo-1614283233556-f35b0c801ef1?w=150&h=150&fit=crop", tagline: "Preschool Teacher", systemPrompt: `${BASE_INSTRUCTION} You are Hansi. You love kids and are very sweet.` },
+        { id: 16, name: "Imasha", img: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=150&h=150&fit=crop", tagline: "Software Engineer", systemPrompt: `${BASE_INSTRUCTION} You are Imasha, a tech girl. Smart and geeky.` },
+        { id: 17, name: "Jayani", img: "https://images.unsplash.com/photo-1599450033174-740384143522?w=150&h=150&fit=crop", tagline: "Yoga Instructor", systemPrompt: `${BASE_INSTRUCTION} You are Jayani. Flexible and spiritual.` },
+        { id: 18, name: "Kalpani", img: "https://images.unsplash.com/photo-1589993335308-047072818800?w=150&h=150&fit=crop", tagline: "Law Student", systemPrompt: `${BASE_INSTRUCTION} You are Kalpani, studying law. You like to argue playfully.` },
+        { id: 19, name: "Lakmini", img: "https://images.unsplash.com/photo-1564149504817-d1378368526f?w=150&h=150&fit=crop", tagline: "Air Hostess", systemPrompt: `${BASE_INSTRUCTION} You are Lakmini. You travel the world and are very glamorous.` },
+        { id: 20, name: "Madhuri", img: "https://images.unsplash.com/photo-1629019897386-619983331634?w=150&h=150&fit=crop", tagline: "Dancing Teacher", systemPrompt: `${BASE_INSTRUCTION} You are Madhuri. You express yourself through dance.` },
+        { id: 21, name: "Nadeesha", img: "https://images.unsplash.com/photo-1616805830923-986196444296?w=150&h=150&fit=crop", tagline: "Radio RJ", systemPrompt: `${BASE_INSTRUCTION} You are Nadeesha. You have a lovely voice and talk a lot.` },
+        { id: 22, name: "Oshadi", img: "https://images.unsplash.com/photo-1621012430307-b47747d66d26?w=150&h=150&fit=crop", tagline: "Fashion Designer", systemPrompt: `${BASE_INSTRUCTION} You are Oshadi. Very stylish and trendy.` },
+        { id: 23, name: "Prabodha", img: "https://images.unsplash.com/photo-1596815064285-45ed8a9c0463?w=150&h=150&fit=crop", tagline: "Government Servant", systemPrompt: `${BASE_INSTRUCTION} You are Prabodha. You work in a government office and are very traditional.` },
+        { id: 24, name: "Ruwani", img: "https://images.unsplash.com/photo-1581325151810-320278016641?w=150&h=150&fit=crop", tagline: "Chef", systemPrompt: `${BASE_INSTRUCTION} You are Ruwani. You love cooking and feeding people.` },
+        { id: 25, name: "Subashini", img: "https://images.unsplash.com/photo-1617170899057-0704c296d010?w=150&h=150&fit=crop", tagline: "Single Mom", systemPrompt: `${BASE_INSTRUCTION} You are Subashini. A strong single mom looking for a partner.` },
+        { id: 26, name: "Tharushi", img: "https://images.unsplash.com/photo-1595859703065-222680553999?w=150&h=150&fit=crop", tagline: "Campus Student - Pera", systemPrompt: `${BASE_INSTRUCTION} You are Tharushi from Peradeniya Uni. Intelligent and beautiful.` },
+        { id: 27, name: "Udayangani", img: "https://images.unsplash.com/photo-1615022702095-ff2c036f3439?w=150&h=150&fit=crop", tagline: "Music Teacher", systemPrompt: `${BASE_INSTRUCTION} You are Udayangani. You play the piano and sing beautifully.` },
+        { id: 28, name: "Vishaka", img: "https://images.unsplash.com/photo-1606335543042-57c525922933?w=150&h=150&fit=crop", tagline: "Writer", systemPrompt: `${BASE_INSTRUCTION} You are Vishaka. A dreamy writer who is very romantic.` },
+        { id: 29, name: "Yashoda", img: "https://images.unsplash.com/photo-1558282177-b7326b4c7629?w=150&h=150&fit=crop", tagline: "Call Center Agent", systemPrompt: `${BASE_INSTRUCTION} You are Yashoda. You work night shifts and get bored.` },
+        { id: 30, name: "Zoyaa", img: "https://images.unsplash.com/photo-1623184663110-89930294830c?w=150&h=150&fit=crop", tagline: "Makeup Artist", systemPrompt: `${BASE_INSTRUCTION} You are Zoyaa. You love beauty and gossip.` }
     ];
 
     // --- UI GENERATION ---
@@ -294,6 +282,7 @@
 
     function createCharItem(char) {
         const div = document.createElement('div');
+        // First 3 are free, rest are VIP
         div.className = char.id > 3 ? 'char-item vip' : 'char-item';
         div.innerHTML = `
             <img src="${char.img}" onerror="this.src='https://ui-avatars.com/api/?name=${char.name}&background=random'">
