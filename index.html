@@ -17,20 +17,11 @@
             margin: 0; padding: 0; display: flex; height: 100dvh; overflow: hidden; 
         }
 
-        /* --- LAYOUT FIX (NEW) --- */
-        #app-content {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
+        /* --- LAYOUT FIX --- */
+        #app-content { display: flex; width: 100%; height: 100%; overflow: hidden; }
 
-        /* --- BLUR EFFECT FOR LOCK --- */
-        .blur-content {
-            filter: blur(5px);
-            pointer-events: none;
-            user-select: none;
-        }
+        /* --- BLUR EFFECT --- */
+        .blur-content { filter: blur(8px); pointer-events: none; user-select: none; }
 
         /* --- SIDEBAR --- */
         #sidebar { background: white; display: flex; flex-direction: column; border-right: 1px solid #ddd; z-index: 1000; }
@@ -41,7 +32,6 @@
         .char-item.active { background: #f0f2f5; }
         .char-item.vip { background: #fff; position: relative; }
         .char-item.vip::after { content: 'VIP'; position: absolute; right: 10px; top: 10px; font-size: 9px; background: #ffd32a; color: #000; padding: 2px 5px; border-radius: 4px; font-weight: bold; }
-        
         .char-item img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 1px solid #ddd; }
         .char-info { flex: 1; }
         .char-info h4 { margin: 0; font-size: 15px; color: #111; font-weight: 600; }
@@ -49,16 +39,22 @@
 
         /* --- CHAT AREA --- */
         #chat-area { flex: 1; display: flex; flex-direction: column; background-color: #efeae2; position: relative; }
-        #header { padding: 0 16px; background: #f0f2f5; color: #54656f; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #d1d7db; height: 60px; }
+        #header { padding: 0 10px; background: #f0f2f5; color: #54656f; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #d1d7db; height: 60px; }
         
-        /* WHATSAPP CALL BUTTON STYLE */
+        .header-actions { margin-left: auto; display: flex; gap: 8px; }
+
+        .share-btn {
+            background: #128C7E; color: white; padding: 6px 10px; border-radius: 20px;
+            font-size: 11px; font-weight: bold; display: flex; align-items: center;
+            gap: 4px; cursor: pointer; border: 1px solid #075E54;
+        }
+        
         .call-cta-btn {
-            background: #25D366; color: white; padding: 6px 12px; border-radius: 20px;
-            font-size: 12px; font-weight: bold; display: flex; align-items: center;
-            gap: 6px; cursor: pointer; margin-left: auto; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            background: #25D366; color: white; padding: 6px 10px; border-radius: 20px;
+            font-size: 11px; font-weight: bold; display: flex; align-items: center;
+            gap: 4px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             animation: pulse-green 1.5s infinite; border: 1px solid #1ebd56;
         }
-        .call-cta-btn span { font-size: 16px; }
         @keyframes pulse-green {
             0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); transform: scale(1); }
             70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); transform: scale(1.05); }
@@ -68,8 +64,8 @@
         .menu-btn { font-size: 24px; cursor: pointer; padding: 5px; color: #54656f; }
         .profile-pic { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
         .header-info { display: flex; flex-direction: column; justify-content: center; }
-        .header-name { font-weight: bold; font-size: 16px; color: #111; }
-        .header-status { font-size: 12px; color: #666; }
+        .header-name { font-weight: bold; font-size: 15px; color: #111; }
+        .header-status { font-size: 11px; color: #666; }
 
         /* --- LOVE METER --- */
         #love-meter-container {
@@ -78,33 +74,26 @@
             background: rgba(255, 255, 255, 0.95); border-radius: 50%;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             display: flex; align-items: center; justify-content: center;
-            border: 2px solid #ff4757;
-            transition: transform 0.2s;
+            border: 2px solid #ff4757; transition: transform 0.2s;
         }
         #love-meter-container:active { transform: scale(0.9); }
         .love-icon { font-size: 24px; color: #ff4757; animation: heartbeat 1.5s infinite; }
-        .love-percent { 
-            position: absolute; bottom: -18px; background: #ff4757; color: white; 
-            font-size: 10px; padding: 2px 6px; border-radius: 10px; font-weight: bold;
-        }
+        .love-percent { position: absolute; bottom: -18px; background: #ff4757; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; font-weight: bold; }
         @keyframes heartbeat { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
 
-        #messages { 
-            flex: 1; padding: 20px 5%; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; 
-            background-image: url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png");
-            background-repeat: repeat; opacity: 1;
-        }
+        #messages { flex: 1; padding: 20px 5%; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; background-image: url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png"); background-repeat: repeat; opacity: 1; }
         
         .msg { max-width: 80%; padding: 8px 12px; border-radius: 8px; font-size: 14.5px; line-height: 20px; position: relative; box-shadow: 0 1px 0.5px rgba(0,0,0,0.13); margin-bottom: 2px; }
         .msg.user { align-self: flex-end; background: #d9fdd3; color: #111; }
         .msg.ai { align-self: flex-start; background: #ffffff; color: #111; }
         .msg.gift { align-self: flex-end; background: #fff2cc; border: 1px solid #ffd32a; text-align: center; }
-        .msg.system-note { 
-            align-self: center; background: #ffeecd; color: #54656f; 
-            font-size: 12px; padding: 5px 10px; border-radius: 20px; 
-            box-shadow: none; border: 1px solid #e2dacc; margin: 10px 0;
-            text-align: center; max-width: 90%;
-        }
+        
+        /* SYSTEM MESSAGE STYLE */
+        .msg.system-note { align-self: center; background: #ffeecd; color: #54656f; font-size: 12px; padding: 5px 10px; border-radius: 20px; box-shadow: none; border: 1px solid #e2dacc; margin: 10px 0; text-align: center; max-width: 90%; }
+        
+        /* ERROR MESSAGE STYLE */
+        .msg.error-note { align-self: center; background: #ffdddd; color: #d63031; font-size: 12px; padding: 5px 10px; border-radius: 20px; box-shadow: none; border: 1px solid #fab1a0; margin: 10px 0; text-align: center; max-width: 90%; font-weight: bold; }
+
         .msg-time { float: right; margin-left: 8px; margin-top: 5px; font-size: 11px; color: #999; }
 
         #input-area { padding: 10px 16px; background: #f0f2f5; display: flex; align-items: center; gap: 10px; min-height: 62px; }
@@ -113,21 +102,14 @@
         button#gift-btn { font-size: 22px; background: none; border: none; cursor: pointer; padding: 5px; }
 
         /* --- MODALS --- */
-        #ad-modal, #gift-modal, #call-modal, #share-lock-modal { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 9999; 
-        }
+        #ad-modal, #gift-modal, #call-modal, #share-lock-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; z-index: 9999; }
         
-        /* SHARE LOCK MODAL SPECIFIC */
-        #share-lock-modal { 
-            background: rgba(0,0,0,0.95); /* Darker background */
-            z-index: 99999; /* Always on top */
-            display: flex; /* Show by default if script enables it */
-        }
-
+        /* SHARE LOCK SPECIFIC */
+        #share-lock-modal { background: rgba(0,0,0,0.96); z-index: 99999; display: flex; flex-direction: column; }
+        
         .modal-content { background: white; padding: 25px; border-radius: 15px; text-align: center; max-width: 300px; width: 85%; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
         .modal-btn { background: #00a884; color: white; padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; margin-top: 15px; width: 100%; font-weight: bold; font-size: 15px; }
-        .modal-btn.share-unlock { background: #128C7E; animation: pulse-green 2s infinite; font-size: 16px; }
+        .modal-btn.share-unlock { background: #128C7E; animation: pulse-green 2s infinite; font-size: 16px; width: 100%; display: block; }
         .modal-btn.cancel { background: #555; margin-top: 10px; }
         
         .gift-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
@@ -170,7 +152,7 @@
     <div class="modal-content">
         <div style="font-size: 40px; margin-bottom: 10px;">⚠️</div>
         <h2 style="color:#e84118; margin:0 0 10px 0;">Connection Error</h2>
-        <p style="color:#555; font-size:14px;">Lost connection to server. Please reconnect.</p>
+        <p id="ad-modal-text" style="color:#555; font-size:14px;">Lost connection to server. Please reconnect.</p>
         <button class="modal-btn" onclick="openAdLink()">🔄 Reconnect</button>
     </div>
 </div>
@@ -190,12 +172,12 @@
         <h2 style="color:#e1b12c; margin:0;">Send a Gift 🎁</h2>
         <p style="font-size:13px; color:#666;">Boost Love Meter +20%</p>
         <div class="gift-grid">
-            <div class="gift-item" onclick="sendGift('Rose 🌹')">🌹<span>Rose</span></div>
-            <div class="gift-item" onclick="sendGift('Chocolate 🍫')">🍫<span>Choco</span></div>
-            <div class="gift-item" onclick="sendGift('Kiss 💋')">💋<span>Kiss</span></div>
-            <div class="gift-item" onclick="sendGift('Ring 💍')">💍<span>Ring</span></div>
-            <div class="gift-item" onclick="sendGift('Teddy 🧸')">🧸<span>Teddy</span></div>
-            <div class="gift-item" onclick="sendGift('Ice Cream 🍦')">🍦<span>Ice Cream</span></div>
+            <div class="gift-item" onclick="prepareGift('Rose 🌹')">🌹<span>Rose</span></div>
+            <div class="gift-item" onclick="prepareGift('Chocolate 🍫')">🍫<span>Choco</span></div>
+            <div class="gift-item" onclick="prepareGift('Kiss 💋')">💋<span>Kiss</span></div>
+            <div class="gift-item" onclick="prepareGift('Ring 💍')">💍<span>Ring</span></div>
+            <div class="gift-item" onclick="prepareGift('Teddy 🧸')">🧸<span>Teddy</span></div>
+            <div class="gift-item" onclick="prepareGift('Ice Cream 🍦')">🍦<span>Ice Cream</span></div>
         </div>
         <p style="font-size:11px; color:#999; margin-top:15px;">Watch Ad to send gift</p>
         <button class="modal-btn cancel" onclick="document.getElementById('gift-modal').style.display='none'">Cancel</button>
@@ -221,8 +203,9 @@
                 <div class="header-status">online</div>
             </div>
             
-            <div class="call-cta-btn" onclick="document.getElementById('call-modal').style.display='flex'">
-                <span>📹</span> Click for Call
+            <div class="header-actions">
+                <div class="share-btn" onclick="shareToUnlock()"><span>🚀</span> Share</div>
+                <div class="call-cta-btn" onclick="document.getElementById('call-modal').style.display='flex'"><span>📹</span> Call</div>
             </div>
         </div>
 
@@ -252,12 +235,18 @@
     // ================= CONFIGURATION =================
     const WORKER_URL = "https://chatgirl.ranbindua.workers.dev"; 
     const MONETAG_DIRECT_LINK = "https://otieu.com/4/10358055"; 
-    const AD_INTERVAL = 4;
+    const AD_INTERVAL = 5; // ERROR EVERY 5 MESSAGES
     // =================================================
+
+    // --- CLICK COUNTERS FOR "GEMAK" ---
+    let reconnectClicks = 0;
+    let callClicks = 0;
+    let giftClicks = 0;
+    let selectedGiftName = "";
 
     // --- SHARE LOCK LOGIC ---
     window.onload = function() {
-        const isUnlocked = localStorage.getItem('appUnlocked');
+        const isUnlocked = localStorage.getItem('appUnlocked_final_v3'); 
         if (!isUnlocked) {
             document.getElementById('share-lock-modal').style.display = 'flex';
             document.getElementById('app-content').classList.add('blur-content');
@@ -271,13 +260,15 @@
         const message = "Me app eka balapanko! Lankwe kello ekka chat karanna puluwan. Pattamai! 👇\n\n" + appLink;
         window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(message), '_blank');
         
-        document.querySelector('.share-unlock').innerText = "Verifying...";
-        setTimeout(() => {
-            document.getElementById('share-lock-modal').style.display = 'none';
-            document.getElementById('app-content').classList.remove('blur-content');
-            localStorage.setItem('appUnlocked', 'true');
-            alert("Unlocked Successfully! Welcome! ❤️");
-        }, 3000); 
+        if(document.getElementById('share-lock-modal').style.display !== 'none') {
+            document.querySelector('.share-unlock').innerText = "Verifying...";
+            setTimeout(() => {
+                document.getElementById('share-lock-modal').style.display = 'none';
+                document.getElementById('app-content').classList.remove('blur-content');
+                localStorage.setItem('appUnlocked_final_v3', 'true');
+                alert("Unlocked Successfully! Welcome! ❤️");
+            }, 3000);
+        }
     }
 
     let messageCount = 0;
@@ -285,11 +276,7 @@
     let chatHistory = [];
     let loveScore = 10; 
 
-    const BASE_INSTRUCTION = `
-    ROLE: You are a young Sri Lankan girl chatting privately. 
-    LANGUAGE: Singlish.
-    RULES: ACT NATURAL. OPEN MINDED. SHORT REPLIES. NO PHOTOS.
-    `;
+    const BASE_INSTRUCTION = `ROLE: Young Sri Lankan girl. LANGUAGE: Singlish. RULES: NATURAL, OPEN, SHORT REPLIES.`;
 
     const allCharacters = [
         { id: 1, name: "Kavindya", img: "https://images.unsplash.com/photo-1621784563330-caee0b138a00?w=150&h=150&fit=crop", tagline: "24 Years • Wife", systemPrompt: `${BASE_INSTRUCTION} You are Kavindya, his wife.` },
@@ -380,9 +367,14 @@
     }
 
     async function sendMessage() {
+        // --- 1. RECONNECT ERROR LOGIC (Every 5 messages) ---
         if (messageCount > 0 && messageCount % AD_INTERVAL === 0) {
-            document.getElementById('ad-modal').style.display = 'flex'; return; 
+            document.getElementById('ad-modal').style.display = 'flex';
+            reconnectClicks = 0; // Reset counters
+            document.getElementById('ad-modal-text').innerText = "Lost connection to server. Please reconnect.";
+            return; 
         }
+
         const inputField = document.getElementById('user-input');
         const userText = inputField.value.trim();
         if (!userText) return;
@@ -390,8 +382,10 @@
         inputField.value = ''; inputField.focus(); 
         chatHistory.push({ role: "user", content: userText });
         messageCount++; 
+        
         document.getElementById('typing-indicator').style.display = 'block';
         document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+        
         try {
             const response = await fetch(WORKER_URL, {
                 method: "POST", headers: { "Content-Type": "application/json" },
@@ -414,8 +408,24 @@
         }
     }
 
-    function sendGift(giftName) {
-        openAdLink(); document.getElementById('gift-modal').style.display = 'none';
+    // --- 2. GIFT LOGIC (2 Clicks) ---
+    function prepareGift(giftName) {
+        selectedGiftName = giftName;
+        window.open(MONETAG_DIRECT_LINK, '_blank'); // Watch Ad 1
+        giftClicks++;
+        
+        if (giftClicks === 1) {
+            // First time fail
+            addMessage(`❌ <b>Failed:</b> Sending ${giftName} failed! Network error. Try again.`, "error-note");
+        } else {
+            // Second time success
+            sendGiftSuccess(selectedGiftName);
+            giftClicks = 0; // Reset for next time
+        }
+        document.getElementById('gift-modal').style.display = 'none';
+    }
+
+    function sendGiftSuccess(giftName) {
         loveScore += 20; if(loveScore > 100) loveScore = 100; updateLoveMeterUI();
         addMessage(`Sent a Gift: ${giftName}`, 'gift');
         setTimeout(() => { addMessage(`🎁 <b>System:</b> Delivered! +20% Romance`, "system-note"); }, 500);
@@ -429,17 +439,38 @@
         }, 1000);
     }
 
+    // --- 3. CALL LOGIC (2 Clicks) ---
     function startVideoCall() {
-        window.open(MONETAG_DIRECT_LINK, '_blank'); 
+        window.open(MONETAG_DIRECT_LINK, '_blank'); // Ad Link
+        callClicks++;
+        
         document.getElementById('call-modal').style.display = 'none';
-        addMessage("📶 <b>System:</b> Connecting...", "system-note");
-        setTimeout(() => addMessage("⚠️ <b>System:</b> Network error. Try later.", "system-note"), 3000);
+        
+        if (callClicks === 1) {
+            addMessage("📶 <b>System:</b> Connecting...", "system-note");
+            setTimeout(() => addMessage("⚠️ <b>System:</b> Signal weak! Call dropped. Please retry.", "error-note"), 2000);
+        } else {
+            addMessage("📶 <b>System:</b> Connecting...", "system-note");
+            setTimeout(() => addMessage("⚠️ <b>System:</b> Line busy. Try again later.", "system-note"), 3000);
+            callClicks = 0; // Reset
+        }
     }
 
+    // --- 4. RECONNECT LOGIC (3 Clicks) ---
     function openAdLink() {
         window.open(MONETAG_DIRECT_LINK, '_blank'); 
-        document.getElementById('ad-modal').style.display = 'none';
-        if(document.getElementById('ad-modal').style.display === 'flex') { addMessage("Reconnected!", 'system-note'); messageCount++; }
+        reconnectClicks++;
+        
+        if (reconnectClicks >= 3) {
+            document.getElementById('ad-modal').style.display = 'none';
+            addMessage("Reconnected successfully! ✅", 'system-note');
+            messageCount++; 
+            reconnectClicks = 0; // Reset
+        } else {
+            // Fake fail
+            document.getElementById('ad-modal-text').innerText = `Connection Failed! (Attempt ${reconnectClicks}/3). Try again.`;
+            document.getElementById('ad-modal-text').style.color = "red";
+        }
     }
 
     function simulateTyping(text, delay) {
@@ -450,7 +481,7 @@
     function addMessage(text, sender) {
         const div = document.createElement('div');
         div.className = `msg ${sender}`;
-        if (sender === 'system-note') { div.innerHTML = text; } 
+        if (sender === 'system-note' || sender === 'error-note') { div.innerHTML = text; } 
         else { div.innerHTML = `${text} <span class="msg-time">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>`; }
         document.getElementById('messages').appendChild(div);
         document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
