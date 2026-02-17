@@ -347,6 +347,8 @@
         document.getElementById('gift-btn').disabled = false;
         document.getElementById('user-input').focus();
         if (window.innerWidth <= 768) { document.getElementById('sidebar').classList.remove('show'); document.getElementById('overlay').style.display = 'none'; }
+        
+        // Push System Prompt first
         chatHistory.push({ role: "system", content: char.systemPrompt });
         simulateTyping("Hi baba... kohomada?", 1500); 
     }
@@ -380,22 +382,40 @@
         if (!userText) return;
         addMessage(userText, 'user');
         inputField.value = ''; inputField.focus(); 
+        
+        // Add to history
         chatHistory.push({ role: "user", content: userText });
         messageCount++; 
         
         document.getElementById('typing-indicator').style.display = 'block';
         document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
         
+        // --- MEMORY OPTIMIZATION START ---
+        // Create a temporary history for the API call (Last 10 messages + System Prompt)
+        let payloadMessages = [];
+        
+        if (chatHistory.length > 12) {
+            // Keep the System Prompt (index 0) and the last 10 messages
+            payloadMessages = [chatHistory[0], ...chatHistory.slice(-10)];
+        } else {
+            // If history is short, send everything
+            payloadMessages = chatHistory;
+        }
+        // --- MEMORY OPTIMIZATION END ---
+
         try {
             const response = await fetch(WORKER_URL, {
                 method: "POST", headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ "model": "google/gemini-2.5-flash", "messages": chatHistory })
+                body: JSON.stringify({ "model": "google/gemini-2.5-flash", "messages": payloadMessages }) 
             });
             const data = await response.json();
             if(data.error) throw new Error(JSON.stringify(data.error));
             let aiReply = data.choices[0].message.content;
             aiReply = aiReply.replace('[SEND_PHOTO]', "Mata photo ewanna ba baba, api katha karamu.");
+            
+            // Add reply to main history
             chatHistory.push({ role: "assistant", content: aiReply });
+            
             let typingDelay = (aiReply.length * 30) + 1000;
             if (typingDelay > 5000) typingDelay = 5000; 
             setTimeout(() => {
